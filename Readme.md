@@ -50,3 +50,4 @@ git clone SSH-адрес_вашего_форка
 
 [check-image]: https://github.com/htmlacademy-ecmascript/1837789-big-trip-22/workflows/Project%20check/badge.svg?branch=master
 [check-url]: https://github.com/htmlacademy-ecmascript/1837789-big-trip-22/actions
+
