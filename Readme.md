@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Алина Вдовиченко](https://up.htmlacademy.ru/ecmascript/22/user/1837789).
-* Наставник: [Дмитрий Виноградов](https://htmlacademy.ru/profile/id839417).
+* Наставник: [Анастасия Гущина](https://htmlacademy.ru/profile/vanastasiya).
 
 ---
 
