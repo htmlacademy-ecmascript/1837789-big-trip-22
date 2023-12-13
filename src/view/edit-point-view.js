@@ -1,6 +1,6 @@
 import {createElement} from '../render.js';
 
-function createEditPointTemplate() {
+function createEditPointTemplate({point, pointDestinations, pointOffers}) {
   return (
     ` <li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -161,8 +161,18 @@ function createEditPointTemplate() {
 }
 
 export default class EditPointView {
+  constructor({point, pointDestinations, pointOffers}) {
+    this.point = point;
+    this.pointDestinations = pointDestinations;
+    this.pointOffers = pointOffers;
+  }
+
   getTemplate() {
-    return createEditPointTemplate();
+    return createEditPointTemplate({
+      point: this.point,
+      pointDestinations: this.pointDestinations,
+      pointOffers: this.pointOffers,
+    });
   }
 
   getElement() {

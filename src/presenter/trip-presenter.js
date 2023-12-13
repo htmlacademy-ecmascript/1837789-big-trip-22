@@ -7,17 +7,33 @@ import {render} from '../render.js';
 export default class TripPresenter {
   pointsListComponent = new PointListView();
 
-  constructor({pointsContainer}) {
+  constructor({pointsContainer, pointsModel, destinationsModel, offersModel}) {
     this.pointsContainer = pointsContainer;
+    this.destinations = destinationsModel;
+    this.offers = offersModel;
+    this.points = pointsModel.get();
   }
 
   init() {
+    this.tripPoints = [...this.points];
+    console.log(this.tripPoints);
     render(new SortView(), this.pointsContainer);
     render(this.pointsListComponent, this.pointsContainer);
-    render(new EditPointView(), this.pointsListComponent.getElement());
+    render(new EditPointView({
+      point: this.points[0],
+      pointDestinations: this.destinations.getById(this.points[0].destination),
+      pointOffers: this.offers.getByType(this.points[0].type)
+    }), this.pointsListComponent.getElement());
 
-    for (let i = 0; i < 3; i++) {
-      render(new PointView(), this.pointsListComponent.getElement());
-    }
+    this.points.forEach((point) => {
+      render(
+        new PointView({
+          point,
+          pointDestinations: this.destinations.getById(point.destination),
+          pointOffers: this.offers.getByType(point.type)
+        }),
+        this.pointsListComponent.getElement()
+      );
+    });
   }
 }

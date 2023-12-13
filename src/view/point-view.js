@@ -1,6 +1,6 @@
 import {createElement} from '../render.js';
 
-function createPointTemplate() {
+function createPointTemplate({point, pointDestinations, pointOffers}) {
   return (
     `  <li class="trip-events__item">
     <div class="event">
@@ -43,8 +43,18 @@ function createPointTemplate() {
 }
 
 export default class PointView {
+  constructor({ point, pointDestinations, pointOffers }) {
+    this.point = point;
+    this.pointDestinations = pointDestinations;
+    this.pointOffers = pointOffers;
+  }
+
   getTemplate() {
-    return createPointTemplate();
+    return createPointTemplate({
+      point: this.point,
+      pointDestinations: this.pointDestinations,
+      pointOffers: this.pointOffers,
+    });
   }
 
   getElement() {
