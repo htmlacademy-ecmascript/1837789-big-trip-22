@@ -9,7 +9,6 @@ import OffersModel from './model/offers-model.js';
 
 const controlsFiltersElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
-const pageMainElement = document.querySelector('.page-main');
 const infoTripElement = document.querySelector('.trip-main');
 
 const serviceMock = new ServiceMock();
