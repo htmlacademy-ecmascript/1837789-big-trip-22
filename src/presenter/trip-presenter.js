@@ -16,7 +16,7 @@ export default class TripPresenter {
 
   init() {
     this.tripPoints = [...this.points];
-    console.log(this.tripPoints);
+    //console.log(this.tripPoints);
     render(new SortView(), this.pointsContainer);
     render(this.pointsListComponent, this.pointsContainer);
     render(new EditPointView({
