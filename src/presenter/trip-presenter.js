@@ -19,21 +19,33 @@ export default class TripPresenter {
     //console.log(this.tripPoints);
     render(new SortView(), this.pointsContainer);
     render(this.pointsListComponent, this.pointsContainer);
+
+    for(let i = 0; i < 1; i++) {
+      render(
+        new PointView({
+          point: this.points[i],
+          pointDestinations: this.destinations.getById(this.points[i].destination),
+          pointOffers: this.offers.getByType(this.points[i].type)
+        }),
+        this.pointsListComponent.getElement()
+      );
+    }
+
     render(new EditPointView({
       point: this.points[0],
       pointDestinations: this.destinations.getById(this.points[0].destination),
       pointOffers: this.offers.getByType(this.points[0].type)
     }), this.pointsListComponent.getElement());
 
-    this.points.forEach((point) => {
+    for(let i = 1; i < this.points.length; i++) {
       render(
         new PointView({
-          point,
-          pointDestinations: this.destinations.getById(point.destination),
-          pointOffers: this.offers.getByType(point.type)
+          point: this.points[i],
+          pointDestinations: this.destinations.getById(this.points[i].destination),
+          pointOffers: this.offers.getByType(this.points[i].type)
         }),
         this.pointsListComponent.getElement()
       );
-    });
+    }
   }
 }
