@@ -1,5 +1,5 @@
 import {createElement} from '../render.js';
-import {getScheduleDate} from '../mock/date-mock.js';
+import {getScheduleDate} from '../utils.js';
 
 function createOfferTemplate(allOffers, typeName) {
   return (`

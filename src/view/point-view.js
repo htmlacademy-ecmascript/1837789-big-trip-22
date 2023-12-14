@@ -1,5 +1,5 @@
 import {createElement} from '../render.js';
-import {formatStringToShortDate, formatStringToDayTime, formatStringToTime, getPointDuration} from '../mock/date-mock.js';
+import {formatStringToShortDate, formatStringToDayTime, formatStringToTime, getPointDuration} from '../utils.js';
 
 function createPointTemplate({point, pointDestinations, pointOffers}) {
   const {basePrice, dateFrom, dateTo, type, isFavorite} = point;
