@@ -22,7 +22,6 @@ function createPointAddTemplate({point, pointDestinations, pointOffers}) {
   const {type, dateFrom, dateTo, basePrice} = point;
   const {name, description, pictures} = pointDestinations;
   const offerTemplate = createEditPointOfferTemplate(pointOffers);
-  console.log(pictures);
   return (
     `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
