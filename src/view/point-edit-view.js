@@ -1,13 +1,28 @@
 import {createElement} from '../render.js';
 import {getScheduleDate} from '../mock/date-mock.js';
 
+function createOfferTemplate(allOffers, typeName) {
+  return (`
+    ${
+    allOffers.map(
+      (offer) => ` <div class="event__type-item">
+                    <input id="event-type-${offer.type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${offer.type.toLowerCase()}"
+                    ${typeName === offer.type ? 'checked' : ''}>
+                    <label class="event__type-label  event__type-label--${offer.type.toLowerCase()}" for="event-type-${offer.type.toLowerCase()}-1">${offer.type}</label>
+                  </div>`
+    ).join('')
+    }
+  `);
+}
+
 function createEditPointOfferTemplate(offers) {
   return (`
     ${
     offers.map(
-      (offer) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
-      <label class="event__offer-label" for="event-offer-luggage-1">
+      (offer, index) => `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index + 1}" type="checkbox" name="event-offer-luggage"
+      ${index === 1 ? 'checked' : ''}>
+      <label class="event__offer-label" for="event-offer-luggage-${index + 1}">
         <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
@@ -18,10 +33,12 @@ function createEditPointOfferTemplate(offers) {
   `);
 }
 
-function createEditPointTemplate({point, pointDestinations, pointOffers}) {
+function createPointEditTemplate({point, pointDestinations, pointOffers, allOffers}) {
+
   const {type, dateFrom, dateTo, basePrice} = point;
-  const {name, description} = pointDestinations;
+  const {name, description, pictures} = pointDestinations;
   const offerTemplate = createEditPointOfferTemplate(pointOffers);
+  const allOffersTemplate = createOfferTemplate(allOffers, type);
   return (`
   <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -36,51 +53,7 @@ function createEditPointTemplate({point, pointDestinations, pointOffers}) {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-
-            <div class="event__type-item">
-              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-              <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-              <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-              <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-              <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-              <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-              <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-              <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-              <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-            </div>
+            ${allOffersTemplate}
           </fieldset>
         </div>
       </div>
@@ -132,24 +105,34 @@ function createEditPointTemplate({point, pointDestinations, pointOffers}) {
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${name} ${description}</p>
       </section>
+
+      <div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${pictures.map((picture) => `
+                <img class="event__photo" src="${picture.src}" alt="${picture.description}">
+              `).join('')}
+            </div>
+          </div>
     </section>
   </form>
 </li>
     `);
 }
 
-export default class EditPointView {
-  constructor({point, pointDestinations, pointOffers}) {
+export default class PointEditView {
+  constructor({point, pointDestinations, pointOffers, allOffers}) {
     this.point = point;
     this.pointDestinations = pointDestinations;
     this.pointOffers = pointOffers;
+    this.allOffers = allOffers;
   }
 
   getTemplate() {
-    return createEditPointTemplate({
+    return createPointEditTemplate({
       point: this.point,
       pointDestinations: this.pointDestinations,
       pointOffers: this.pointOffers,
+      allOffers: this.allOffers
     });
   }
 

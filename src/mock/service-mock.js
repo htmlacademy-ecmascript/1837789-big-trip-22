@@ -30,7 +30,6 @@ export default class ServiceMock {
   }
 
   generateMockDestinations() {
-    //console.log(Array.from({length: DESTINATION_COUNT}, () => generateMockDestination()));
     return Array.from({length: DESTINATION_COUNT}, () =>
       generateMockDestination());
   }
