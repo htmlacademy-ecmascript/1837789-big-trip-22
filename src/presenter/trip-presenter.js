@@ -11,7 +11,7 @@ export default class TripPresenter {
     this.pointsContainer = pointsContainer;
     this.destinations = destinationsModel;
     this.offers = offersModel;
-    this.allOffers = offersModel.offers;
+    this.allOffers = offersModel.get();
     this.points = pointsModel.get();
   }
 

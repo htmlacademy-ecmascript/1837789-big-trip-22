@@ -1,7 +1,7 @@
 import {createElement} from '../render.js';
 import {getScheduleDate} from '../utils.js';
 
-function createOfferTemplate(allOffers, typeName) {
+function createOffersTemplate(allOffers, typeName) {
   return (`
     ${
     allOffers.map(
@@ -15,7 +15,19 @@ function createOfferTemplate(allOffers, typeName) {
   `);
 }
 
-function createEditPointOfferTemplate(offers) {
+function createPicturesTemplate(pictures) {
+  return (`
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+        ${pictures.map((picture) => `
+          <img class="event__photo" src="${picture.src}" alt="${picture.description}">
+        `).join('')}
+      </div>
+    </div>
+  `);
+}
+
+function createEditPointOffersTemplate(offers) {
   return (`
     ${
     offers.map(
@@ -37,8 +49,9 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
 
   const {type, dateFrom, dateTo, basePrice} = point;
   const {name, description, pictures} = pointDestinations;
-  const offerTemplate = createEditPointOfferTemplate(pointOffers);
-  const allOffersTemplate = createOfferTemplate(allOffers, type);
+  const offersTemplate = createEditPointOffersTemplate(pointOffers);
+  const allOffersTemplate = createOffersTemplate(allOffers, type);
+  const picturesBlock = createPicturesTemplate(pictures);
   return (`
   <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -97,7 +110,7 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-          ${offerTemplate}
+          ${offersTemplate}
         </div>
       </section>
 
@@ -105,14 +118,7 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${name} ${description}</p>
       </section>
-
-      <div class="event__photos-container">
-            <div class="event__photos-tape">
-              ${pictures.map((picture) => `
-                <img class="event__photo" src="${picture.src}" alt="${picture.description}">
-              `).join('')}
-            </div>
-          </div>
+      ${pictures ? picturesBlock : ''}
     </section>
   </form>
 </li>
