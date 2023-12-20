@@ -12,6 +12,7 @@ export default class TripPresenter {
     this.destinations = destinationsModel;
     this.offers = offersModel;
     this.allOffers = offersModel.get();
+    this.allDestinations = destinationsModel.get();
     this.points = pointsModel.get();
   }
 
@@ -23,7 +24,8 @@ export default class TripPresenter {
       point: this.points[0],
       pointDestinations: this.destinations.getById(this.points[0].destination),
       pointOffers: this.offers.getByType(this.points[0].type),
-      allOffers: this.allOffers
+      allOffers: this.allOffers,
+      allDestinations: this.allDestinations,
     }), this.pointsListComponent.getElement());
 
     for(let i = 0; i < this.points.length; i++) {

@@ -1,6 +1,18 @@
 import {createElement} from '../render.js';
 import {getScheduleDate} from '../utils.js';
 
+function createDestinationList(cities) {
+  return (`
+  <datalist id="destination-list-1">
+  ${
+    cities.map(
+      (city) => `<option value="${city}"></option>`
+    ).join('')
+    }
+  </datalist>
+  `);
+}
+
 function createOffersTemplate(allOffers, typeName) {
   return (`
     ${
@@ -29,6 +41,9 @@ function createPicturesTemplate(pictures) {
 
 function createEditPointOffersTemplate(offers) {
   return (`
+    <section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
     ${
     offers.map(
       (offer, index) => `<div class="event__offer-selector">
@@ -42,16 +57,21 @@ function createEditPointOffersTemplate(offers) {
     </div>`
     ).join('')
     }
+    </div>
+    </section>
   `);
 }
 
-function createPointEditTemplate({point, pointDestinations, pointOffers, allOffers}) {
+function createPointEditTemplate({point, pointDestinations, pointOffers, allOffers, allDestinations}) {
 
   const {type, dateFrom, dateTo, basePrice} = point;
   const {name, description, pictures} = pointDestinations;
   const offersTemplate = createEditPointOffersTemplate(pointOffers);
   const allOffersTemplate = createOffersTemplate(allOffers, type);
   const picturesBlock = createPicturesTemplate(pictures);
+  const cities = allDestinations.map((city) => city.name);
+  const uniqueName = Array.from(new Set(cities));
+  const citiesBlock = createDestinationList(uniqueName);
   return (`
   <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -76,11 +96,7 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
           ${type}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
-        <datalist id="destination-list-1">
-          <option value="Amsterdam"></option>
-          <option value="Geneva"></option>
-          <option value="Chamonix"></option>
-        </datalist>
+        ${citiesBlock}
       </div>
 
       <div class="event__field-group  event__field-group--time">
@@ -105,15 +121,9 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
         <span class="visually-hidden">Open event</span>
       </button>
     </header>
+
     <section class="event__details">
-      <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-        <div class="event__available-offers">
-          ${offersTemplate}
-        </div>
-      </section>
-
+          ${pointOffers ? offersTemplate : ''}
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${name} ${description}</p>
@@ -126,11 +136,12 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
 }
 
 export default class PointEditView {
-  constructor({point, pointDestinations, pointOffers, allOffers}) {
+  constructor({point, pointDestinations, pointOffers, allOffers, allDestinations}) {
     this.point = point;
     this.pointDestinations = pointDestinations;
     this.pointOffers = pointOffers;
     this.allOffers = allOffers;
+    this.allDestinations = allDestinations;
   }
 
   getTemplate() {
@@ -138,7 +149,8 @@ export default class PointEditView {
       point: this.point,
       pointDestinations: this.pointDestinations,
       pointOffers: this.pointOffers,
-      allOffers: this.allOffers
+      allOffers: this.allOffers,
+      allDestinations: this.allDestinations
     });
   }
 
