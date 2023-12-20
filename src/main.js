@@ -1,7 +1,7 @@
 import FilterView from './view/filter-view.js';
 import TripInfo from './view/trip-info-view.js';
 import TripPresenter from './presenter/trip-presenter.js';
-import {render, RenderPosition} from './render.js';
+import {render, RenderPosition} from './framework/render.js';
 import PointsModel from './model/points-model.js';
 import ServiceMock from './mock/service-mock.js';
 import DestinationsModel from './model/destinations-model.js';
