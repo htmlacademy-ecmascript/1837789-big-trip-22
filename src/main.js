@@ -24,7 +24,7 @@ const tripPresenter = new TripPresenter({
 });
 
 render(new TripInfo(), infoTripElement, RenderPosition.AFTERBEGIN);
-render(new FilterView(), controlsFiltersElement);
+render(new FilterView(pointsModel.points), controlsFiltersElement);
 
 tripPresenter.init();
 
