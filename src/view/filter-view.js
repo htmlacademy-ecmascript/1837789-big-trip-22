@@ -1,22 +1,34 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import dayjs from 'dayjs';
 
-const filterValues = ['Everything', 'Future', 'Present', 'Past'];
+const FilterType = {
+  EVERYTHING: 'everything',
+  FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past'
+};
 
-function createFilterTemplate(points) {
+const filter = {
+  [FilterType.EVERYTHING]: (points) => [...points],
+  [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(dayjs(point.dateFrom))),
+  [FilterType.PRESENT]: (points) => points.filter((point) => dayjs().isBefore(dayjs(point.dateTo)) && dayjs().isAfter(dayjs(point.dateFrom))),
+  [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(dayjs(point.dateTo)))
+};
+const filterValues = Object.entries(filter).map(([type, getPoints]) => ({
+  type,
+  getPoints,
+}));
+
+function createFilterTemplate(points, currentFilterType = FilterType.EVERYTHING) {
+  //console.log(filter['past'](points));
   return (
     `<form class="trip-filters" action="#" method="get">
-    ${filterValues.map((value, index) => {
-      const valueLowerCase = value.toLowerCase();
-      let switchAttribute = '';
-      if (points.length === 0) {
-        switchAttribute = 'disabled';
-      } else if (index === 1) {
-        switchAttribute = 'checked';
-      }
+    ${filterValues.map(({type, getPoints}) => {
+      const count = getPoints(points).length;
       return (`<div class="trip-filters__filter">
-    <input id="filter-${valueLowerCase}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
-    value="${valueLowerCase}" ${switchAttribute}>
-    <label class="trip-filters__filter-label" for="filter-${valueLowerCase}">${value}</label>
+    <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
+    value="${type}" ${count ? '' : 'disabled'}${type === currentFilterType ? 'checked' : ''}>
+    <label class="trip-filters__filter-label" for="filter-${type}">${type}</label>
   </div>`);
     }).join('')}
 

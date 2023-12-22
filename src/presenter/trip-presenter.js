@@ -9,22 +9,24 @@ export default class TripPresenter {
   #pointsListComponent = new PointListView();
   #sortComponent = new SortView();
   #pointsContainer = null;
-  #destinations = null;
-  #offers = null;
+  #destinationsModel = null;
+  #offersModel = null;
   #allOffers = null;
   #allDestinations = null;
   #points = null;
 
   constructor({pointsContainer, pointsModel, destinationsModel, offersModel}) {
     this.#pointsContainer = pointsContainer;
-    this.#destinations = destinationsModel;
-    this.#offers = offersModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
     this.#allOffers = offersModel.get();
     this.#allDestinations = destinationsModel.get();
     this.#points = pointsModel.get();
   }
 
   init() {
+    console.log(this.#points);
+    console.log(this.#offersModel);
     render(this.#sortComponent, this.#pointsContainer);
     render(this.#pointsListComponent, this.#pointsContainer);
     if (this.#points.length === 0) {
@@ -47,8 +49,8 @@ export default class TripPresenter {
 
     const pointComponent = new PointView({
       point,
-      pointDestinations: this.#destinations.getById(point.destination),
-      pointOffers: this.#offers.getByType(point.type),
+      pointDestinations: this.#destinationsModel.getById(point.destination),
+      pointOffers: this.#offersModel.getByType(point.type).filter((offer) => point.offers.includes(offer.id)),
       onPointClick: () => {
         replacePointToForm();
         document.addEventListener('keydown', escKeyDownHandler);
@@ -57,8 +59,8 @@ export default class TripPresenter {
 
     const pointEditComponent = new PointEditView({
       point,
-      pointDestinations: this.#destinations.getById(point.destination),
-      pointOffers: this.#offers.getByType(point.type),
+      pointDestinations: this.#destinationsModel.getById(point.destination),
+      pointOffers: this.#offersModel.getByType(point.type),
       allOffers: this.#allOffers,
       allDestinations: this.#allDestinations,
       onResetClick: () => {

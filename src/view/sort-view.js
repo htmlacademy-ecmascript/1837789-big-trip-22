@@ -1,23 +1,25 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const sortValues = ['Day', 'Event', 'Time', 'Price', 'Offers'];
+const sortType = {
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers'
+};
 
-function createSortTemplate() {
+const sortValues = ['day', 'event', 'time', 'price', 'offers'];
+
+function createSortTemplate(currentSortType = sortType.DAY) {
   return (
     `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
     ${
-    sortValues.map((value, index) => {
-      const valueLowerCase = value.toLowerCase();
-      let switchAttribute = '';
-      if (index === sortValues.length - 1) {
-        switchAttribute = 'disabled';
-      } else if (index === 1) {
-        switchAttribute = 'checked';
-      }
-      return (`<div class="trip-sort__item  trip-sort__item--${valueLowerCase}">
-                <input id="sort-${valueLowerCase}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-                value="sort-${valueLowerCase}" ${switchAttribute}>
-                <label class="trip-sort__btn" for="sort-${valueLowerCase}">${value}</label>
+    sortValues.map((value) => {
+      const isDisabled = value === sortType.EVENT || value === sortType.OFFERS;
+      return (`<div class="trip-sort__item  trip-sort__item--${value}">
+                <input id="sort-${value}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
+                value="sort-${value}" ${isDisabled ? 'disabled' : ''}${currentSortType === value ? 'checked' : ''}>
+                <label class="trip-sort__btn" for="sort-${value}">${value}</label>
               </div>`);
     }).join('')
     }
