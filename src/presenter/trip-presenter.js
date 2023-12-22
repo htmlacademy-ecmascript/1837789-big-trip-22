@@ -25,8 +25,6 @@ export default class TripPresenter {
   }
 
   init() {
-    console.log(this.#points);
-    console.log(this.#offersModel);
     render(this.#sortComponent, this.#pointsContainer);
     render(this.#pointsListComponent, this.#pointsContainer);
     if (this.#points.length === 0) {
