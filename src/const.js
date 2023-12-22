@@ -51,6 +51,16 @@ const DURATION = {
   min: 20,
 };
 
+const POINT_BLANCK = {
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: 'Taxi',
+};
+
 const DESTINATION_COUNT = 4;
 
 const OFFER_COUNT = 4;
@@ -58,4 +68,13 @@ const OFFER_COUNT = 4;
 const POINT_COUNT = 10;
 
 
-export { TYPES, DESCRIPTIONS, CITIES, OFFERS, PRICE, DURATION, DESTINATION_COUNT, OFFER_COUNT, POINT_COUNT };
+export {TYPES,
+  DESCRIPTIONS,
+  CITIES,
+  OFFERS,
+  PRICE,
+  DURATION,
+  DESTINATION_COUNT,
+  OFFER_COUNT,
+  POINT_COUNT,
+  POINT_BLANCK};

@@ -1,5 +1,6 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {getScheduleDate} from '../utils.js';
+import { POINT_BLANCK } from '../const.js';
 
 function createDestinationList(cities) {
   return (`
@@ -135,34 +136,45 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
     `);
 }
 
-export default class PointEditView {
-  constructor({point, pointDestinations, pointOffers, allOffers, allDestinations}) {
-    this.point = point;
-    this.pointDestinations = pointDestinations;
-    this.pointOffers = pointOffers;
-    this.allOffers = allOffers;
-    this.allDestinations = allDestinations;
+export default class PointEditView extends AbstractView{
+  #point = null;
+  #pointDestinations = null;
+  #pointOffers = null;
+  #allOffers = null;
+  #allDestinations = null;
+  #onResetClick = null;
+  #onPointEditSubmit = null;
+
+  constructor({point = POINT_BLANCK, pointDestinations, pointOffers, allOffers, allDestinations, onPointEditSubmit , onResetClick}) {
+    super();
+    this.#point = point;
+    this.#pointDestinations = pointDestinations;
+    this.#pointOffers = pointOffers;
+    this.#allOffers = allOffers;
+    this.#allDestinations = allDestinations;
+    this.#onResetClick = onResetClick;
+    this.#onPointEditSubmit = onPointEditSubmit;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#resetButtonClickHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#pointEditSubmitHandler);
   }
 
-  getTemplate() {
+  get template() {
     return createPointEditTemplate({
-      point: this.point,
-      pointDestinations: this.pointDestinations,
-      pointOffers: this.pointOffers,
-      allOffers: this.allOffers,
-      allDestinations: this.allDestinations
+      point: this.#point,
+      pointDestinations: this.#pointDestinations,
+      pointOffers: this.#pointOffers,
+      allOffers: this.#allOffers,
+      allDestinations: this.#allDestinations
     });
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+  #resetButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onResetClick();
+  };
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #pointEditSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#onPointEditSubmit();
+  };
 }
