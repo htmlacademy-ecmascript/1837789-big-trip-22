@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {getScheduleDate} from '../utils.js';
-import { POINT_BLANCK } from '../const.js';
+import {getScheduleDate} from '../utils/date-utils.js';
+import {POINT_BLANCK} from '../mock/const-mock.js';
 
 function createDestinationList(cities) {
   return (`

@@ -1,5 +1,5 @@
-import {getRandomInteger, createUniqueId} from '../utils.js';
-import {PRICE, POINT_COUNT} from '../const.js';
+import {getRandomInteger, createUniqueId} from './utils-mock.js';
+import {PRICE, POINT_COUNT} from './const-mock.js';
 import {getDate} from './date-mock.js';
 
 const pointId = createUniqueId(1, POINT_COUNT);
