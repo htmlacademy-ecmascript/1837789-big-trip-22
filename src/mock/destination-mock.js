@@ -1,5 +1,5 @@
-import {getRandomArrayElement, getRandomInteger, createUniqueId} from '../utils.js';
-import {CITIES, DESCRIPTIONS, POINT_COUNT, DESTINATION_COUNT} from '../const.js';
+import {getRandomArrayElement, getRandomInteger, createUniqueId} from './utils-mock.js';
+import {CITIES, DESCRIPTIONS, POINT_COUNT, DESTINATION_COUNT} from './const-mock.js';
 
 const PICTURE_COUNT = 5;
 const DESTINATIONS_COUNT = POINT_COUNT * DESTINATION_COUNT;

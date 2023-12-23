@@ -1,14 +1,13 @@
-import {getRandomInteger, getRandomArrayElement} from '../utils.js';
+import {getRandomInteger, getRandomArrayElement} from './utils-mock.js';
 import {generateMockDestination} from './destination-mock.js';
 import {generateMockOffer} from './offer-mock.js';
 import {generateMockPoint} from './point-mock.js';
-
 import {
   TYPES,
   DESTINATION_COUNT,
   OFFER_COUNT,
   POINT_COUNT,
-} from '../const.js';
+} from './const-mock.js';
 
 export default class ServiceMock {
   constructor() {

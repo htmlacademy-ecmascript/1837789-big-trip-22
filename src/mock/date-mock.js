@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils';
-import {DURATION} from '../const';
+import {getRandomInteger} from './utils-mock.js';
+import {DURATION} from './const-mock.js';
 
 let date = dayjs().subtract(getRandomInteger(0, DURATION.day), 'day').toDate();
 
