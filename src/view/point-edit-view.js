@@ -175,6 +175,6 @@ export default class PointEditView extends AbstractView{
 
   #pointEditSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#onPointEditSubmit();
+    this.#onPointEditSubmit(this.#point);
   };
 }
