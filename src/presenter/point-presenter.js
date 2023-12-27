@@ -62,11 +62,12 @@ export default class PointPresenter {
 
     // Проверка на наличие в DOM необходима,
     // чтобы не пытаться заменить то, что не было отрисовано
-    if (this.#pointsContainer.contains(prevPointComponent.element)) {
+
+    if (this.#mode === MODE.default) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#pointsContainer.contains(prevPointEditComponent.element)) {
+    if (this.#mode === MODE.editing) {
       replace(this.#pointEditComponent, prevPointEditComponent);
     }
 
