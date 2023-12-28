@@ -40,6 +40,7 @@ export default class TripPresenter {
 
   #handlePointsChange = (updatedPoint) => {
     this.#points = updateItem(this.#points, updatedPoint);
+    this.#sourcedPoints = updateItem(this.#sourcedPoints, updatedPoint);
     //console.log(this.#points);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
