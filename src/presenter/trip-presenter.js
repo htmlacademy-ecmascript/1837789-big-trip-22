@@ -26,6 +26,9 @@ export default class TripPresenter {
     this.#offersModel = offersModel;
     this.#pointsModel = pointsModel;
     this.#points = [...this.#pointsModel.get()];
+    // 1. В отличии от сортировки по любому параметру,
+    // исходный порядок можно сохранить только одним способом -
+    // сохранив исходный массив:
     this.#sourcedPoints = [...this.#pointsModel.get()];
   }
 
