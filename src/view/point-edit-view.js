@@ -49,7 +49,7 @@ function createEditPointOffersTemplate(offers) {
     offers.map(
       (offer, index) => `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index + 1}" type="checkbox" name="event-offer-luggage"
-      ${index === 1 ? 'checked' : ''}>
+      checked>
       <label class="event__offer-label" for="event-offer-luggage-${index + 1}">
         <span class="event__offer-title">${offer.title}</span>
           &plus;&euro;&nbsp;

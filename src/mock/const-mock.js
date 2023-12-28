@@ -67,12 +67,6 @@ const OFFER_COUNT = 4;
 
 const POINT_COUNT = 10;
 
-const MODE = {
-  default: 'default',
-  editing: 'editing',
-};
-
-
 export {TYPES,
   DESCRIPTIONS,
   CITIES,
@@ -82,5 +76,4 @@ export {TYPES,
   DESTINATION_COUNT,
   OFFER_COUNT,
   POINT_COUNT,
-  POINT_BLANCK,
-  MODE};
+  POINT_BLANCK};
