@@ -18,7 +18,7 @@ function createSortTemplate(currentSortType = sortType.DAY) {
       const isDisabled = value === sortType.EVENT || value === sortType.OFFERS;
       return (`<div class="trip-sort__item  trip-sort__item--${value}">
                 <input id="sort-${value}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-                value="sort-${value}" ${isDisabled ? 'disabled' : ''}${currentSortType === value ? 'checked' : ''}>
+                value="sort-${value}" data-sort-type="${value}" ${isDisabled ? 'disabled' : ''}${currentSortType === value ? 'checked' : ''}>
                 <label class="trip-sort__btn" for="sort-${value}">${value}</label>
               </div>`);
     }).join('')
