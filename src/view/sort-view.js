@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {SortType, sortValues} from '../const/sort-const.js';
+import {getUpperFirstChar} from '../utils/common.js';
 
 function createSortTemplate(currentSortType = SortType.DAY) {
   return (
@@ -10,7 +11,7 @@ function createSortTemplate(currentSortType = SortType.DAY) {
       return (`<div class="trip-sort__item  trip-sort__item--${value}">
                 <input id="sort-${value}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
                 value="sort-${value}" data-sort-type="${value}" ${isDisabled ? 'disabled' : ''}${currentSortType === value ? 'checked' : ''}>
-                <label class="trip-sort__btn" for="sort-${value}">${value}</label>
+                <label class="trip-sort__btn" for="sort-${value}">${getUpperFirstChar(value)}</label>
               </div>`);
     }).join('')
     }

@@ -1,6 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {getScheduleDate} from '../utils/date-utils.js';
 import {POINT_BLANCK} from '../mock/const-mock.js';
+import {getUpperFirstChar} from '../utils/common.js';
 
 function createDestinationList(cities) {
   return (`
@@ -21,7 +22,7 @@ function createOffersTemplate(allOffers, typeName) {
       (offer) => ` <div class="event__type-item">
                     <input id="event-type-${offer.type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${offer.type.toLowerCase()}"
                     ${typeName === offer.type ? 'checked' : ''}>
-                    <label class="event__type-label  event__type-label--${offer.type.toLowerCase()}" for="event-type-${offer.type.toLowerCase()}-1">${offer.type}</label>
+                    <label class="event__type-label  event__type-label--${offer.type.toLowerCase()}" for="event-type-${offer.type.toLowerCase()}-1">${getUpperFirstChar(offer.type)}</label>
                   </div>`
     ).join('')
     }

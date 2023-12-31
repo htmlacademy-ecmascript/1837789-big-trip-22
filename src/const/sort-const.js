@@ -6,6 +6,6 @@ const SortType = {
   OFFERS: 'offers'
 };
 
-const sortValues = ['day', 'event', 'time', 'price', 'offers'];
+const sortValues = [SortType.DAY, SortType.EVENT, SortType.TIME, SortType.PRICE, SortType.OFFERS];
 
 export {SortType, sortValues};

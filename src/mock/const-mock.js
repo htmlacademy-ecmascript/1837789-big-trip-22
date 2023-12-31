@@ -1,13 +1,13 @@
 const TYPES = [
-  'Taxi',
-  'Bus',
-  'Train',
-  'Ship',
-  'Drive',
-  'Flight',
-  'Check-in',
-  'Sightseeing',
-  'Restaurant',
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant',
 ];
 
 const DESCRIPTIONS = [
@@ -58,7 +58,7 @@ const POINT_BLANCK = {
   destination: null,
   isFavorite: false,
   offers: [],
-  type: 'Taxi',
+  type: 'taxi',
 };
 
 const DESTINATION_COUNT = 4;

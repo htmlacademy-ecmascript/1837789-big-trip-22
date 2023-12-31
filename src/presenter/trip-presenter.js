@@ -64,6 +64,7 @@ export default class TripPresenter {
   #renderPoints = () => {
     this.#points.forEach((point) => {
       this.#renderPoint(point);
+      //console.log(point.type);
     });
   };
 
