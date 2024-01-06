@@ -64,12 +64,14 @@ function createEditPointOffersTemplate(offers) {
   `);
 }
 
-function createPointEditTemplate({state , pointDestinations, pointOffers, allOffers, allDestinations}) {
+function createPointEditTemplate({state, allOffers, allDestinations}) {
 
   const {point} = state;
-  const {type, dateFrom, dateTo, basePrice} = point;
-  const {name, description, pictures} = pointDestinations;
-  const offersTemplate = createEditPointOffersTemplate(pointOffers);
+  const {type, dateFrom, dateTo, basePrice, destination} = point;
+  const offersByType = allOffers.find((item) => item.type.toLowerCase() === point.type.toLowerCase()).offers;
+  const destinationById = allDestinations.find((item) => item.id === destination);
+  const {name, description, pictures} = destinationById;
+  const offersTemplate = createEditPointOffersTemplate(offersByType);
   const allOffersTemplate = createTypeTemplate(allOffers, type);
   const picturesBlock = createPicturesTemplate(pictures);
   const cities = allDestinations.map((city) => city.name);
@@ -126,7 +128,7 @@ function createPointEditTemplate({state , pointDestinations, pointOffers, allOff
     </header>
 
     <section class="event__details">
-          ${pointOffers ? offersTemplate : ''}
+          ${offersByType ? offersTemplate : ''}
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${name} ${description}</p>
@@ -139,34 +141,27 @@ function createPointEditTemplate({state , pointDestinations, pointOffers, allOff
 }
 
 export default class PointEditView extends AbstractStatefulView {
-  #pointDestinations = null;
-  #pointOffers = null;
   #allOffers = null;
   #allDestinations = null;
   #onResetClick = null;
   #onPointEditSubmit = null;
 
-  constructor({point = POINT_BLANCK, pointDestinations, pointOffers, allOffers, allDestinations, onPointEditSubmit , onResetClick}) {
+  constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick}) {
     super();
     this._state = point;
     this._setState(PointEditView.parsePointToState({point}));
-    this.#pointDestinations = pointDestinations;
-    this.#pointOffers = pointOffers;
     this.#allOffers = allOffers;
     this.#allDestinations = allDestinations;
     this._restoreHandlers();
     this.#onResetClick = onResetClick;
     this.#onPointEditSubmit = onPointEditSubmit;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#resetButtonClickHandler);
-    this.element.querySelector('form').addEventListener('submit', this.#pointEditSubmitHandler);
   }
 
   get template() {
+
     //console.log(this._state);
     return createPointEditTemplate({
       state: this._state,
-      pointDestinations: this.#pointDestinations,
-      pointOffers: this.#pointOffers,
       allOffers: this.#allOffers,
       allDestinations: this.#allDestinations
     });
@@ -176,6 +171,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#resetButtonClickHandler);
     this.element.querySelector('form').addEventListener('submit', this.#pointEditSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
   }
 
   reset = (point) => this.updateElement({point});
@@ -196,6 +192,18 @@ export default class PointEditView extends AbstractStatefulView {
         ...this._state.point,
         type: evt.target.value,
         offer: []
+      }
+    });
+  };
+
+  #destinationChangeHandler = (evt) => {
+    const selectedDestination = this.#allDestinations.find((pointDestination) => pointDestination.name === evt.target.value);
+    const selectedDestinationId = (selectedDestination) ? selectedDestination.id : this._state.point.destination;
+
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        destination: selectedDestinationId
       }
     });
   };

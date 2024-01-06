@@ -47,8 +47,6 @@ export default class PointPresenter {
 
     this.#pointEditComponent = new PointEditView({
       point: this.#point,
-      pointDestinations: this.#destinationsModel.getById(point.destination),
-      pointOffers: this.#offersModel.getByType(point.type),
       allOffers: this.#allOffers,
       allDestinations: this.#allDestinations,
       onResetClick: this.#handleFormClose,
