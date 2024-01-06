@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {getScheduleDate} from '../utils/date-utils.js';
 import {POINT_BLANCK} from '../mock/const-mock.js';
 import {getUpperFirstChar} from '../utils/common.js';
@@ -15,14 +15,14 @@ function createDestinationList(cities) {
   `);
 }
 
-function createOffersTemplate(allOffers, typeName) {
+function createTypeTemplate(allOffers, currentType) {
   return (`
     ${
     allOffers.map(
       (offer) => ` <div class="event__type-item">
-                    <input id="event-type-${offer.type.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${offer.type.toLowerCase()}"
-                    ${typeName === offer.type ? 'checked' : ''}>
-                    <label class="event__type-label  event__type-label--${offer.type.toLowerCase()}" for="event-type-${offer.type.toLowerCase()}-1">${getUpperFirstChar(offer.type)}</label>
+                    <input id="event-type-${offer.type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${offer.type}"
+                    ${currentType === offer.type ? 'checked' : ''}>
+                    <label class="event__type-label  event__type-label--${offer.type}" for="event-type-${offer.type}-1">${getUpperFirstChar(offer.type)}</label>
                   </div>`
     ).join('')
     }
@@ -64,12 +64,13 @@ function createEditPointOffersTemplate(offers) {
   `);
 }
 
-function createPointEditTemplate({point, pointDestinations, pointOffers, allOffers, allDestinations}) {
+function createPointEditTemplate({state , pointDestinations, pointOffers, allOffers, allDestinations}) {
 
+  const {point} = state;
   const {type, dateFrom, dateTo, basePrice} = point;
   const {name, description, pictures} = pointDestinations;
   const offersTemplate = createEditPointOffersTemplate(pointOffers);
-  const allOffersTemplate = createOffersTemplate(allOffers, type);
+  const allOffersTemplate = createTypeTemplate(allOffers, type);
   const picturesBlock = createPicturesTemplate(pictures);
   const cities = allDestinations.map((city) => city.name);
   const uniqueName = Array.from(new Set(cities));
@@ -137,8 +138,7 @@ function createPointEditTemplate({point, pointDestinations, pointOffers, allOffe
     `);
 }
 
-export default class PointEditView extends AbstractView{
-  #point = null;
+export default class PointEditView extends AbstractStatefulView {
   #pointDestinations = null;
   #pointOffers = null;
   #allOffers = null;
@@ -148,11 +148,13 @@ export default class PointEditView extends AbstractView{
 
   constructor({point = POINT_BLANCK, pointDestinations, pointOffers, allOffers, allDestinations, onPointEditSubmit , onResetClick}) {
     super();
-    this.#point = point;
+    this._state = point;
+    this._setState(PointEditView.parsePointToState({point}));
     this.#pointDestinations = pointDestinations;
     this.#pointOffers = pointOffers;
     this.#allOffers = allOffers;
     this.#allDestinations = allDestinations;
+    this._restoreHandlers();
     this.#onResetClick = onResetClick;
     this.#onPointEditSubmit = onPointEditSubmit;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#resetButtonClickHandler);
@@ -160,14 +162,23 @@ export default class PointEditView extends AbstractView{
   }
 
   get template() {
+    //console.log(this._state);
     return createPointEditTemplate({
-      point: this.#point,
+      state: this._state,
       pointDestinations: this.#pointDestinations,
       pointOffers: this.#pointOffers,
       allOffers: this.#allOffers,
       allDestinations: this.#allDestinations
     });
   }
+
+  _restoreHandlers() {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#resetButtonClickHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#pointEditSubmitHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+  }
+
+  reset = (point) => this.updateElement({point});
 
   #resetButtonClickHandler = (evt) => {
     evt.preventDefault();
@@ -176,6 +187,19 @@ export default class PointEditView extends AbstractView{
 
   #pointEditSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#onPointEditSubmit(this.#point);
+    this.#onPointEditSubmit(PointEditView.parseStateToPoint(this._state));
   };
+
+  #typeChangeHandler = (evt) => {
+    this.updateElement({
+      point: {
+        ...this._state.point,
+        type: evt.target.value,
+        offer: []
+      }
+    });
+  };
+
+  static parsePointToState = ({point}) => ({point});
+  static parseStateToPoint = (state) => state.point;
 }
