@@ -3,11 +3,12 @@ import {getScheduleDate} from '../utils/date-utils.js';
 import {POINT_BLANCK} from '../mock/const-mock.js';
 import {getUpperFirstChar} from '../utils/common.js';
 
-function createDestinationList(cities) {
+function createDestinationList(allDestinations) {
+  const cityDestinations = Array.from(new Set(allDestinations.map((item) => item.name)));
   return (`
   <datalist id="destination-list-1">
   ${
-    cities.map(
+    cityDestinations.map(
       (city) => `<option value="${city}"></option>`
     ).join('')
     }
@@ -41,23 +42,26 @@ function createPicturesTemplate(pictures) {
   `);
 }
 
-function createEditPointOffersTemplate(offers) {
+function createEditPointOffersTemplate(offersByType, point) {
   return (`
     <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
     ${
-    offers.map(
-      (offer, index) => `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index + 1}" type="checkbox" name="event-offer-luggage"
-      checked>
-      <label class="event__offer-label" for="event-offer-luggage-${index + 1}">
-        <span class="event__offer-title">${offer.title}</span>
-          &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offer.price}</span>
-      </label>
-    </div>`
-    ).join('')
+    offersByType.map(
+      (offer) => {
+        const checked = point.offers.includes(offer.id) ? 'checked' : '';
+        return (
+          `<div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage"
+          ${checked}>
+          <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
+            <span class="event__offer-title">${offer.title}</span>
+              &plus;&euro;&nbsp;
+            <span class="event__offer-price">${offer.price}</span>
+          </label>
+        </div>`);
+      }).join('')
     }
     </div>
     </section>
@@ -68,15 +72,13 @@ function createPointEditTemplate({state, allOffers, allDestinations}) {
 
   const {point} = state;
   const {type, dateFrom, dateTo, basePrice, destination} = point;
-  const offersByType = allOffers.find((item) => item.type.toLowerCase() === point.type.toLowerCase()).offers;
+  const offersByType = allOffers.find((item) => item.type === point.type).offers;
   const destinationById = allDestinations.find((item) => item.id === destination);
   const {name, description, pictures} = destinationById;
-  const offersTemplate = createEditPointOffersTemplate(offersByType);
+  const offersTemplate = createEditPointOffersTemplate(offersByType, point);
   const allOffersTemplate = createTypeTemplate(allOffers, type);
   const picturesBlock = createPicturesTemplate(pictures);
-  const cities = allDestinations.map((city) => city.name);
-  const uniqueName = Array.from(new Set(cities));
-  const citiesBlock = createDestinationList(uniqueName);
+  const citiesBlock = createDestinationList(allDestinations);
   return (`
   <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -172,6 +174,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('form').addEventListener('submit', this.#pointEditSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#offerChangeHandler);
   }
 
   reset = (point) => this.updateElement({point});
@@ -204,6 +207,17 @@ export default class PointEditView extends AbstractStatefulView {
       point: {
         ...this._state.point,
         destination: selectedDestinationId
+      }
+    });
+  };
+
+  #offerChangeHandler = () => {
+    const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+
+    this._setState({
+      point: {
+        ...this._state.point,
+        offers: checkedBoxes.map((element) => element.dataset.offerId)
       }
     });
   };

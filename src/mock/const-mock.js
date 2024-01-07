@@ -65,7 +65,7 @@ const DESTINATION_COUNT = 4;
 
 const OFFER_COUNT = 4;
 
-const POINT_COUNT = 1;
+const POINT_COUNT = 10;
 
 export {TYPES,
   DESCRIPTIONS,

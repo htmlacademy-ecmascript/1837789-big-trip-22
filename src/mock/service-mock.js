@@ -51,6 +51,7 @@ export default class ServiceMock {
       );
       const offersIds = offersByType
         ? offersByType.offers
+          .slice(0, getRandomInteger(0, OFFER_COUNT))
           .map((offer) => offer.id)
         : [];
 
