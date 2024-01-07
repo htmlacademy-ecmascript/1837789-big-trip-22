@@ -53,9 +53,9 @@ function createEditPointOffersTemplate(offersByType, point) {
         const checked = point.offers.includes(offer.id) ? 'checked' : '';
         return (
           `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage"
-          ${checked}>
-          <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-${offer.id}"
+          data-offer-id=${offer.id} ${checked}>
+          <label class="event__offer-label" for="event-offer-${offer.id}">
             <span class="event__offer-title">${offer.title}</span>
               &plus;&euro;&nbsp;
             <span class="event__offer-price">${offer.price}</span>
@@ -161,7 +161,6 @@ export default class PointEditView extends AbstractStatefulView {
 
   get template() {
 
-    //console.log(this._state);
     return createPointEditTemplate({
       state: this._state,
       allOffers: this.#allOffers,
@@ -218,7 +217,7 @@ export default class PointEditView extends AbstractStatefulView {
     this._setState({
       point: {
         ...this._state.point,
-        offers: checkedBoxes.map((element) => element.dataset.offerId)
+        offers: checkedBoxes.map((element) => +(element.dataset.offerId))
       }
     });
   };
