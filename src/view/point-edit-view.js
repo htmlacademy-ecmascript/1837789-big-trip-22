@@ -163,6 +163,22 @@ export default class PointEditView extends AbstractStatefulView {
     this.#onPointEditSubmit = onPointEditSubmit;
   }
 
+  // Перегружаем метод родителя removeElement,
+  // чтобы при удалении удалялся более не нужный календарь
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerFrom) {
+      this.#datepickerFrom.destroy();
+      this.#datepickerFrom = null;
+    }
+
+    if (this.#datepickerTo) {
+      this.#datepickerTo.destroy();
+      this.#datepickerTo = null;
+    }
+  }
+
   get template() {
 
     return createPointEditTemplate({
