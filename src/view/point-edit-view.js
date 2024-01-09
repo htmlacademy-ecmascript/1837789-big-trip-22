@@ -177,7 +177,11 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
   }
 
-  reset = (point) => this.updateElement({point});
+  reset = (point) => {
+    this.updateElement(
+      PointEditView.parsePointToState({point}),
+    );
+  };
 
   #resetButtonClickHandler = (evt) => {
     evt.preventDefault();
