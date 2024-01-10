@@ -149,10 +149,11 @@ export default class PointEditView extends AbstractStatefulView {
   #allDestinations = null;
   #onResetClick = null;
   #onPointEditSubmit = null;
+  #onDeleteClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
 
-  constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick}) {
+  constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick, onDeleteClick}) {
     super();
     this._state = point;
     this._setState(PointEditView.parsePointToState({point}));
@@ -161,6 +162,7 @@ export default class PointEditView extends AbstractStatefulView {
     this._restoreHandlers();
     this.#onResetClick = onResetClick;
     this.#onPointEditSubmit = onPointEditSubmit;
+    this.#onDeleteClick = onDeleteClick;
   }
 
   // Перегружаем метод родителя removeElement,
@@ -196,6 +198,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__available-offers')?.addEventListener('change', this.#offerChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.#setDatepickers();
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteHandler);
   }
 
   reset = (point) => {
@@ -305,6 +308,11 @@ export default class PointEditView extends AbstractStatefulView {
         minDate: this._state.point.dateFrom,
       }
     );
+  };
+
+  #formDeleteHandler = (evt) => {
+    evt.preventDefault();
+    this.#onDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
 
   static parsePointToState = ({point}) => ({point});
