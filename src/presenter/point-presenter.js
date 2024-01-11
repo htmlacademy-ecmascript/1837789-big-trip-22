@@ -1,11 +1,7 @@
 import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
 import {render, replace, remove} from '../framework/render.js';
-
-const Mode = {
-  DEFAULT: 'default',
-  EDITING: 'editing',
-};
+import {EditType, Mode} from '../const/point-const.js';
 
 export default class PointPresenter {
   #pointsContainer = null;
@@ -51,6 +47,8 @@ export default class PointPresenter {
       allDestinations: this.#allDestinations,
       onResetClick: this.#handleFormClose,
       onPointEditSubmit: this.#handleFormSubmit,
+      onDeleteClick: this.#handleDeleteClick,
+      modeAddForm: EditType.EDITING
     });
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -116,11 +114,16 @@ export default class PointPresenter {
   };
 
   #handleFormClose = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleFavoriteClick = () => {
     this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(point);
   };
 }
