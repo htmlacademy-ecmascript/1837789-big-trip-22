@@ -31,7 +31,7 @@ export default class HeaderPresenter {
   }
 
   #buttonClickHandler = () => {
-    console.log('1');
+    //console.log('1');
   };
 
 }
