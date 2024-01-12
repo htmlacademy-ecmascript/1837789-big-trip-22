@@ -4,8 +4,11 @@ import {getUpperFirstChar} from '../utils/common.js';
 
 function createFilterTemplate(points, currentFilterType = FilterType.EVERYTHING) {
   return (
-    `<form class="trip-filters" action="#" method="get">
-    ${filterValues.map(({type, getPoints}) => {
+    `<div class="trip-main__trip-controls  trip-controls">
+      <div class="trip-controls__filters">
+      <h2 class="visually-hidden">Filter events</h2>
+      <form class="trip-filters" action="#" method="get">
+      ${filterValues.map(({type, getPoints}) => {
       const count = getPoints(points).length;
       return (`<div class="trip-filters__filter">
     <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
@@ -15,7 +18,9 @@ function createFilterTemplate(points, currentFilterType = FilterType.EVERYTHING)
     }).join('')}
 
     <button class="visually-hidden" type="submit">Accept filter</button>
-  </form>`
+    </form>
+    </div>
+    </div>`
   );
 }
 

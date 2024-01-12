@@ -5,12 +5,11 @@ import PointsModel from './model/points-model.js';
 import ServiceMock from './mock/service-mock.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
-import FilterPresenter from './presenter/filter-presenter.js';
+import HeaderPresenter from './presenter/header-presenter.js';
 import {FilterType} from './const/filter-const.js';
 
-const controlsFiltersElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
-const infoTripElement = document.querySelector('.trip-main');
+const headerElement = document.querySelector('.trip-main');
 
 const serviceMock = new ServiceMock();
 const destinationsModel = new DestinationsModel(serviceMock);
@@ -25,13 +24,11 @@ const tripPresenter = new TripPresenter({
   pointsModel,
 });
 
-const filterPresenter = new FilterPresenter({
+const filterPresenter = new HeaderPresenter({
   pointsModel,
   filterType,
-  filtersContainer: controlsFiltersElement,
+  headerContainer: headerElement,
 });
-
-render(new TripInfo(), infoTripElement, RenderPosition.AFTERBEGIN);
 
 tripPresenter.init();
 
