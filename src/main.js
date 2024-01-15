@@ -22,7 +22,7 @@ const tripPresenter = new TripPresenter({
   pointsModel,
 });
 
-const filterPresenter = new HeaderPresenter({
+const headerPresenter = new HeaderPresenter({
   pointsModel,
   filterType,
   headerContainer: headerElement,
@@ -30,5 +30,5 @@ const filterPresenter = new HeaderPresenter({
 
 tripPresenter.init();
 
-filterPresenter.init();
+headerPresenter.init();
 

@@ -12,7 +12,7 @@ export default class DestinationsModel {
   }
 
   getById(id) {
-    const findDestination = this.#destinations.find((destination) => destination.id === id);
-    return findDestination || null;
+    const foundDestination = this.#destinations.find((destination) => destination.id === id);
+    return foundDestination || null;
   }
 }

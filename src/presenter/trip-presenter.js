@@ -3,15 +3,14 @@ import {SortType} from '../const/sort-const.js';
 import SortView from '../view/sort-view.js';
 import {render} from '../framework/render.js';
 import NoPointView from '../view/no-point-view.js';
-import {updateItem} from '../utils/common.js';
 import PointPresenter from './point-presenter.js';
-import { sortPointByTime, sortPointByPrice, sortPointByDay } from '../utils/sort-utils.js';
+import {sortPointByTime, sortPointByPrice, sortPointByDay} from '../utils/sort-utils.js';
+//import {UserAction, UpdateType} from '../const/point-const.js';
 
 export default class TripPresenter {
   #pointsListComponent = new PointListView();
   #sortComponent = null;
   #currentSortType = SortType.DAY;
-  #sourcedPoints = [];
   #pointsContainer = null;
   #destinationsModel = null;
   #offersModel = null;
@@ -26,10 +25,18 @@ export default class TripPresenter {
     this.#offersModel = offersModel;
     this.#pointsModel = pointsModel;
     this.#points = [...this.#pointsModel.get()];
-    // 1. В отличии от сортировки по любому параметру,
-    // исходный порядок можно сохранить только одним способом -
-    // сохранив исходный массив:
-    this.#sourcedPoints = [...this.#pointsModel.get()];
+  }
+
+  get points() {
+    switch (this.#currentSortType) {
+      case SortType.TIME:
+        return this.#points.sort(sortPointByTime);
+      case SortType.PRICE:
+        return this.#points.sort(sortPointByPrice);
+      case SortType.DAY:
+        return this.#points.sort(sortPointByDay);
+    }
+    return this.#points;
   }
 
   init() {
@@ -41,8 +48,6 @@ export default class TripPresenter {
   };
 
   #handlePointsChange = (updatedPoint) => {
-    this.#points = updateItem(this.#points, updatedPoint);
-    this.#sourcedPoints = updateItem(this.#sourcedPoints, updatedPoint);
     this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
   };
 
@@ -60,9 +65,8 @@ export default class TripPresenter {
   }
 
   #renderPoints = () => {
-    this.#points.forEach((point) => {
+    this.points.forEach((point) => {
       this.#renderPoint(point);
-      //console.log(point.type);
     });
   };
 
@@ -71,30 +75,12 @@ export default class TripPresenter {
     this.#pointPresenters.clear();
   }
 
-  #sortPoints(sortType) {
-    switch (sortType) {
-      case SortType.TIME:
-        this.#points.sort(sortPointByTime);
-        break;
-      case SortType.PRICE:
-        this.#points.sort(sortPointByPrice);
-        break;
-      case SortType.DAY:
-        this.#points.sort(sortPointByDay);
-        break;
-      default:
-        this.#points = [...this.#sourcedPoints];
-    }
-
-    this.#currentSortType = sortType;
-  }
-
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
 
-    this.#sortPoints(sortType);
+    this.#currentSortType = sortType;
     this.#clearPoints();
     this.#renderPoints();
   };

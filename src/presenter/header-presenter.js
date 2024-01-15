@@ -30,8 +30,13 @@ export default class HeaderPresenter {
     render(this.#newPointButtonComponent, this.#headerContainer);
   }
 
+  // Методы для New Buttton --------------------------------------------
+
   #buttonClickHandler = () => {
     //console.log('1');
   };
 
+  // Методы для Filter -------------------------------------------------
+
+  // Методы для tripInfo --------------------------------------------
 }

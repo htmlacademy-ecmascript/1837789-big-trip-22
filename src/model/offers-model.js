@@ -12,7 +12,7 @@ export default class OffersModel {
   }
 
   getByType(type) {
-    const findOffers = this.#offers.find((offer) => offer.type === type).offers;
-    return findOffers || null;
+    const foundOffers = this.#offers.find((offer) => offer.type === type).offers;
+    return foundOffers || null;
   }
 }
