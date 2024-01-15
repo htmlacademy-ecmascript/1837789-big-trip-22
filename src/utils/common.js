@@ -1,6 +1,6 @@
 // Функция для обновления точек
 
-const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
+//const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
 
 // Функция преобразоввывает первую букву строки в верхний регистр
 
@@ -10,4 +10,4 @@ const getUpperFirstChar = (str) => {
   }
 };
 
-export {updateItem, getUpperFirstChar};
+export {getUpperFirstChar};
