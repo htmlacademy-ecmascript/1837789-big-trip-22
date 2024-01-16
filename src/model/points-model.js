@@ -1,4 +1,5 @@
 import Observable from '../framework/observable.js';
+//import {updateItem} from '../utils/common.js';
 
 export default class PointsModel extends Observable{
   #service = null;
@@ -10,7 +11,7 @@ export default class PointsModel extends Observable{
     this.#points = this.#service.getPoints();
   }
 
-  get() {
+  get points() {
     return this.#points;
   }
 

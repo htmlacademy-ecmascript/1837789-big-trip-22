@@ -14,7 +14,7 @@ export default class HeaderPresenter {
 
   constructor({pointsModel, filterType, headerContainer}) {
     this.#pointsModel = pointsModel;
-    this.#points = this.#pointsModel.get();
+    this.#points = this.#pointsModel.points;
     this.#headerContainer = headerContainer;
     this.#filterType = filterType;
     this.#filterComponent = new FilterView(this.#points, this.#filterType);
