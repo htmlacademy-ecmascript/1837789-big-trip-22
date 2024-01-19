@@ -4,7 +4,8 @@ import {POINT_BLANCK} from '../mock/const-mock.js';
 import {getUpperFirstChar} from '../utils/common.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import {EditType, Mode} from '../const/point-const.js';
+import {EditType} from '../const/point-const.js';
+import he from 'he';
 
 function createDestinationList(allDestinations) {
   const cityDestinations = Array.from(new Set(allDestinations.map((item) => item.name)));
@@ -33,6 +34,18 @@ function createTypeTemplate(allOffers, currentType) {
   `);
 }
 
+function createDateTemplate(dateFrom, dateTo, isDateCreating) {
+  return (`
+    <div class="event__field-group  event__field-group--time">
+      <label class="visually-hidden" for="event-start-time-1">From</label>
+      <input class="event__input  event__input--time" required id="event-start-time-1" type="text" name="event-start-time" value="${isDateCreating ? getScheduleDate(dateFrom) : ''}">
+      &mdash;
+      <label class="visually-hidden" for="event-end-time-1">To</label>
+      <input class="event__input  event__input--time" required id="event-end-time-1" type="text" name="event-end-time"  value="${isDateCreating ? getScheduleDate(dateTo) : ''}">
+    </div>
+`);
+}
+
 function createPicturesTemplate(pictures) {
   return (`
     <div class="event__photos-container">
@@ -43,6 +56,20 @@ function createPicturesTemplate(pictures) {
       </div>
     </div>
   `);
+}
+
+function createDestinationsTemplate (hasDestinations, destinationById) {
+  return (`
+  ${hasDestinations ? `
+  <section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${destinationById.description}</p>
+    <div class="event__photos-container">
+      ${createPicturesTemplate(destinationById.pictures)}
+    </div>
+  </section>
+  ` : ''}
+`);
 }
 
 function createEditPointOffersTemplate(offersByType, point) {
@@ -88,13 +115,12 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
   const {type, dateFrom, dateTo, basePrice, destination} = point;
   const offersByType = allOffers.find((item) => item.type === point.type).offers;
   const destinationById = allDestinations.find((item) => item.id === destination);
-  const {name, description, pictures} = destinationById;
   const offersTemplate = createEditPointOffersTemplate(offersByType, point);
   const allOffersTemplate = createTypeTemplate(allOffers, type);
-  const picturesBlock = createPicturesTemplate(pictures);
   const citiesBlock = createDestinationList(allDestinations);
   const {isDisabled, isSaving, isDeleting} = state;
-  const isCreating = modeAddForm === EditType.CREATING;
+  const hasDestinations = destinationById?.pictures.length > 0 || destinationById?.description;
+  const isCreating = (modeAddForm === EditType.CREATING);
 
   return (`
   <li class="trip-events__item">
@@ -119,24 +145,18 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
         <label class="event__label  event__type-output" for="event-destination-1">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${name}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationById ? he.encode(destinationById.name) : ''}" list="destination-list-1">
         ${citiesBlock}
       </div>
 
-      <div class="event__field-group  event__field-group--time">
-        <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getScheduleDate(dateFrom)}">
-        &mdash;
-        <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getScheduleDate(dateTo)}">
-      </div>
+      ${createDateTemplate(dateFrom, dateTo)}
 
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${he.encode(String(basePrice))}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
@@ -145,12 +165,7 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
 
     <section class="event__details">
           ${offersByType ? offersTemplate : ''}
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${name} ${description}</p>
-      </section>
-      ${pictures ? picturesBlock : ''}
-    </section>
+          ${createDestinationsTemplate(hasDestinations, destinationById)}
   </form>
 </li>
     `);
@@ -164,18 +179,18 @@ export default class PointEditView extends AbstractStatefulView {
   #onDeleteClick = null;
   #datepickerFrom = null;
   #datepickerTo = null;
-  #modeAddForm = EditType.EDITING;
+  #modeAddForm = null;
 
-  constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick, onDeleteClick, modeAddForm = Mode.EDITING}) {
+  constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick, onDeleteClick, modeAddForm}) {
     super();
     this._setState(PointEditView.parsePointToState(point));
     this.#allOffers = allOffers;
     this.#allDestinations = allDestinations;
+    this.#modeAddForm = modeAddForm;
     this._restoreHandlers();
     this.#onResetClick = onResetClick;
     this.#onPointEditSubmit = onPointEditSubmit;
     this.#onDeleteClick = onDeleteClick;
-    this.#modeAddForm = modeAddForm;
   }
 
   // Перегружаем метод родителя removeElement,
@@ -254,7 +269,7 @@ export default class PointEditView extends AbstractStatefulView {
   #offerChangeHandler = () => {
     const checkedBoxes = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
     this._setState({
-      offers: checkedBoxes.map((element) => +(element.dataset.offerId))
+      offers: checkedBoxes.map((element) => element.dataset.offerId)
     });
   };
 
@@ -316,10 +331,7 @@ export default class PointEditView extends AbstractStatefulView {
 
   static parsePointToState(point) {
     return {
-      ...point,
-      isDisabled: false,
-      isSaving: false,
-      isDeleting: false,
+      ...point
     };
   }
 

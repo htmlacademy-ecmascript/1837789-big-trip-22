@@ -1,9 +1,8 @@
-import {getRandomArrayElement, getRandomInteger, createUniqueId} from './utils-mock.js';
-import {CITIES, DESCRIPTIONS, POINT_COUNT, DESTINATION_COUNT} from './const-mock.js';
+import {getRandomArrayElement, getRandomInteger} from './utils-mock.js';
+import {CITIES, DESCRIPTIONS} from './const-mock.js';
+import {nanoid} from 'nanoid';
 
 const PICTURE_COUNT = 5;
-const DESTINATIONS_COUNT = POINT_COUNT * DESTINATION_COUNT;
-const destinationId = createUniqueId(1, DESTINATIONS_COUNT);
 
 function generatePicture(city, description) {
   return {
@@ -19,7 +18,7 @@ function generateMockDestination() {
   const city = getRandomArrayElement(CITIES);
   const description = getRandomArrayElement(DESCRIPTIONS);
   return {
-    id: destinationId(),
+    id: nanoid(),
     description: description,
     name: city,
     pictures: generatePictures(city, description),

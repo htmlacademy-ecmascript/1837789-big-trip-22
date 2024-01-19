@@ -52,7 +52,6 @@ export default class PointPresenter {
       onDeleteClick: this.#handleDeleteClick,
       modeAddForm: EditType.EDITING
     });
-
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#pointsContainer);
       return;
@@ -128,7 +127,7 @@ export default class PointPresenter {
   #handleFavoriteClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {...this.#point, isFavorite: !this.#point.isFavorite}
     );
   };

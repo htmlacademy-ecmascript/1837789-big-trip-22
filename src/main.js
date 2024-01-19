@@ -3,7 +3,7 @@ import PointsModel from './model/points-model.js';
 import ServiceMock from './mock/service-mock.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
-import HeaderPresenter from './presenter/header-presenter.js';
+import TripInfoPresenter from './presenter/tripInfo-presenter.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 
@@ -25,13 +25,14 @@ const filterPresenter = new FilterPresenter({
 
 const tripPresenter = new TripPresenter({
   pointsContainer: tripEventsElement,
+  newPointButtonContainer:headerElement,
   destinationsModel,
   offersModel,
   pointsModel,
   filterModel
 });
 
-const headerPresenter = new HeaderPresenter({
+const tripInfoPresenter = new TripInfoPresenter({
   pointsModel,
   filterModel,
   headerContainer: headerElement,
@@ -39,6 +40,6 @@ const headerPresenter = new HeaderPresenter({
 
 
 filterPresenter.init();
-headerPresenter.init();
+tripInfoPresenter.init();
 tripPresenter.init();
 

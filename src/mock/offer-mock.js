@@ -1,12 +1,10 @@
-import {getRandomInteger, getRandomArrayElement, createUniqueId} from './utils-mock.js';
-import {OFFERS, PRICE, POINT_COUNT, OFFER_COUNT} from './const-mock.js';
-
-const OFFERS_COUNT = POINT_COUNT * OFFER_COUNT;
-const offerId = createUniqueId(1, OFFERS_COUNT);
+import {getRandomInteger, getRandomArrayElement} from './utils-mock.js';
+import {OFFERS, PRICE} from './const-mock.js';
+import {nanoid} from 'nanoid';
 
 function generateMockOffer() {
   return {
-    id: offerId(),
+    id: nanoid(),
     title: getRandomArrayElement(OFFERS),
     price: getRandomInteger(PRICE.min, PRICE.max),
   };
