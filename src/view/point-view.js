@@ -1,6 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {formatStringToShortDate, formatStringToDayTime, formatStringToTime, getPointDuration} from '../utils/date-utils.js';
 import {getUpperFirstChar} from '../utils/common.js';
+import he from 'he';
 
 function createOffersTemplate(offers) {
   return (`
@@ -17,8 +18,6 @@ function createOffersTemplate(offers) {
 
 function createPointTemplate({point, pointDestinations, pointOffers}) {
   const {basePrice, dateFrom, dateTo, type, isFavorite} = point;
-  const {name} = pointDestinations;
-  //console.log(pointOffers);
   const selectedOffers = pointOffers.filter((offer) => point.offers.includes(offer.id));
   const offersTemplate = createOffersTemplate(selectedOffers);
   return (
@@ -30,7 +29,7 @@ function createPointTemplate({point, pointDestinations, pointOffers}) {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${getUpperFirstChar(type)} ${name}</h3>
+        <h3 class="event__title">${getUpperFirstChar(type)} ${pointDestinations ? he.encode(pointDestinations.name) : ''}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime=${formatStringToDayTime(dateFrom)}>${formatStringToTime(dateFrom)}</time>

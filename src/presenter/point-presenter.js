@@ -2,6 +2,8 @@ import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
 import {render, replace, remove} from '../framework/render.js';
 import {EditType, Mode} from '../const/point-const.js';
+import {UserAction, UpdateType} from '../const/point-const.js';
+import {isBigDifference} from '../utils/date-utils.js';
 
 export default class PointPresenter {
   #pointsContainer = null;
@@ -50,7 +52,6 @@ export default class PointPresenter {
       onDeleteClick: this.#handleDeleteClick,
       modeAddForm: EditType.EDITING
     });
-
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#pointsContainer);
       return;
@@ -108,8 +109,12 @@ export default class PointPresenter {
     this.#replacePointToForm();
   };
 
-  #handleFormSubmit = (point) => {
-    this.#handleDataChange(point);
+  #handleFormSubmit = (update) => {
+    const isMinorUpdate = isBigDifference(update, this.#point);
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update);
     this.#replaceFormToPoint();
   };
 
@@ -120,10 +125,17 @@ export default class PointPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      {...this.#point, isFavorite: !this.#point.isFavorite}
+    );
   };
 
   #handleDeleteClick = (point) => {
-    this.#handleDataChange(point);
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point);
   };
 }

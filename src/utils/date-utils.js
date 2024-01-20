@@ -59,11 +59,23 @@ function getScheduleDate(dueDate) {
   return dayjs(dueDate).format(DateFormat.scheduleDate);
 }
 
+function getPointsPriceDifference(pointA, pointB) {
+  return pointB.basePrice - pointA.basePrice;
+}
+
+function isBigDifference(pointA, pointB) {
+  return pointA.dateFrom !== pointB.dateFrom
+  || pointA.basePrice !== pointB.basePrice
+  || getPointDuration(pointA.dateFrom, pointA.dateTo) !== getPointDuration(pointB.dateFrom, pointB.dateTo);
+}
+
 export {
   formatStringToDayTime,
   formatStringToShortDate,
   formatStringToTime,
   getPointDuration,
-  getScheduleDate
+  getScheduleDate,
+  getPointsPriceDifference,
+  isBigDifference
 };
 

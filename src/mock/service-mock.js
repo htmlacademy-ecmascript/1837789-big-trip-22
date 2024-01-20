@@ -11,7 +11,7 @@ import {
 
 export default class ServiceMock {
   constructor() {
-    this.destinations = [...this.generateMockDestinations()];
+    this.destinations = this.generateMockDestinations();
     this.offers = this.generateMockOffers();
     this.points = this.generateMockPoints();
   }
