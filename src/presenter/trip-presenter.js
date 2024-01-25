@@ -9,9 +9,12 @@ import {UserAction, UpdateType} from '../const/point-const.js';
 import {filter, FilterType} from '../const/filter-const.js';
 import NewPointPresenter from './new-point-presenter.js';
 import NewPointButtonView from '../view/new-point-button-view.js';
+import LoadingView from '../view/loading-view.js';
+import {RenderPosition} from '../render.js';
 
 export default class TripPresenter {
   #pointsListComponent = new PointListView();
+  #loadingComponent = new LoadingView();
   #sortComponent = null;
   #currentSortType = SortType.DAY;
   #pointsContainer = null;
@@ -26,6 +29,7 @@ export default class TripPresenter {
   #filterModel = null;
   #filterType = FilterType.EVERYTHING;
   #newPointButtonComponent = null;
+  #isLoading = true;
 
 
   constructor({pointsContainer, newPointButtonContainer, pointsModel, destinationsModel, offersModel, filterModel}) {
@@ -95,6 +99,7 @@ export default class TripPresenter {
   #clearTrip = ({resetSortType = false} = {}) => {
     this.#clearPoints();
     remove(this.#sortComponent);
+    remove(this.#loadingComponent);
     this.#sortComponent = null;
 
     if (resetSortType) {
@@ -133,6 +138,11 @@ export default class TripPresenter {
         break;
       case UpdateType.MAJOR:
         this.#clearTrip({resetSortType: true});
+        this.#renderTrip();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
         this.#renderTrip();
         break;
     }
@@ -192,14 +202,22 @@ export default class TripPresenter {
     render(this.#pointsListComponent, this.#pointsContainer);
   };
 
+  #renderLoading() {
+    render(this.#loadingComponent, this.#pointsListComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
   #renderNoPoints = () => {
     this.#noPointsComponent = new NoPointView({filterType: this.#filterType});
     render(this.#noPointsComponent, this.#pointsListComponent.element);
   };
 
   #renderTrip = () => {
-    if(this.points.length === 0) {
+    if(this.points.length === 0 && !this.#isLoading) {
       this.#renderNoPoints();
+      return;
+    }
+    if (this.#isLoading) {
+      this.#renderLoading();
       return;
     }
     this.#renderSort();

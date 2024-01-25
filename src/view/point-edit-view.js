@@ -1,11 +1,20 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {getScheduleDate} from '../utils/date-utils.js';
-import {POINT_BLANCK} from '../mock/const-mock.js';
 import {getUpperFirstChar} from '../utils/common.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import {EditType} from '../const/point-const.js';
 import he from 'he';
+
+const POINT_BLANCK = {
+  basePrice: 0,
+  dateFrom: null,
+  dateTo: null,
+  destination: null,
+  isFavorite: false,
+  offers: [],
+  type: 'taxi',
+};
 
 function createDestinationList(allDestinations) {
   const cityDestinations = Array.from(new Set(allDestinations.map((item) => item.name)));
@@ -64,9 +73,7 @@ function createDestinationsTemplate (hasDestinations, destinationById) {
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destinationById.description}</p>
-    <div class="event__photos-container">
-      ${createPicturesTemplate(destinationById.pictures)}
-    </div>
+    ${createPicturesTemplate(destinationById.pictures)}
   </section>
   ` : ''}
 `);
@@ -156,7 +163,7 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${he.encode(String(basePrice))} min="1" max="100000" required">
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${he.encode(String(basePrice))}" min="1" max="100000" required>
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>

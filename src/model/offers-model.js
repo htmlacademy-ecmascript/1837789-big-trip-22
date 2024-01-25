@@ -1,13 +1,17 @@
 export default class OffersModel {
-  #service = null;
+  #pointsApiService = null;
   #offers = null;
 
-  constructor(service) {
-    this.#service = service;
-    this.#offers = this.#service.getOffers();
+  constructor({pointsApiService}) {
+    this.#pointsApiService = pointsApiService;
   }
 
   get() {
+    return this.#offers;
+  }
+
+  async init() {
+    this.#offers = await this.#pointsApiService.offers;
     return this.#offers;
   }
 
