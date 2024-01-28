@@ -8,7 +8,7 @@ import FilterPresenter from './presenter/filter-presenter.js';
 import PointsApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic myxa';
-const END_POINT = 'https://22.objects.pages.academy/big-trip';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const tripEventsElement = document.querySelector('.trip-events');
 const headerElement = document.querySelector('.trip-main');
