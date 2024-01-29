@@ -90,7 +90,8 @@ export default class TripPresenter {
   #renderTripInfo (points) {
     this.#tripInfoComponent = new TripInfoView({
       points: points,
-      destinations: this.#destinationsModel.get()
+      destinations: this.#destinationsModel.get(),
+      offersModel: this.#offersModel
     });
     render(this.#tripInfoComponent, this.#newPointButtonContainer, RenderPosition.AFTERBEGIN);
   }

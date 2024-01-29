@@ -3,7 +3,7 @@ import {formatStringToShortDate} from '../utils/date-utils.js';
 
 const MAX_LENGTH = 3;
 
-function createTripInfoTemplate({points, destinations}) {
+function createTripInfoTemplate({points, destinations, offersModel}) {
   const DAY_START = formatStringToShortDate(points[0].dateFrom);
   const DAY_END = formatStringToShortDate(points[points.length - 1].dateFrom);
   let price = 0;
@@ -24,6 +24,10 @@ function createTripInfoTemplate({points, destinations}) {
 
   points.forEach((point) => {
     price += point.basePrice;
+    const offers = offersModel.getByType(point.type).filter((offer) => point.offers.includes(offer.id));
+    const selectedOffers = offers.filter((offer) => point.offers.includes(offer.id));
+    const selectedOffersPrice = selectedOffers.reduce((accumulator, selectedOffer) => accumulator + selectedOffer.price, 0);
+    price += selectedOffersPrice;
   });
 
   return `<section class="trip-main__trip-info  trip-info">
@@ -42,17 +46,20 @@ function createTripInfoTemplate({points, destinations}) {
 export default class TripInfoView extends AbstractView{
   #points = null;
   #destinations = null;
+  #offersModel = null;
 
-  constructor({points, destinations}) {
+  constructor({points, destinations, offersModel}) {
     super();
     this.#points = points;
     this.#destinations = destinations;
+    this.#offersModel = offersModel;
   }
 
   get template() {
     return createTripInfoTemplate({
       points: this.#points,
-      destinations: this.#destinations
+      destinations: this.#destinations,
+      offersModel: this.#offersModel
     });
   }
 }

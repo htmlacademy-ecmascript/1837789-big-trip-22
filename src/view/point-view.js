@@ -17,6 +17,7 @@ function createOffersTemplate(offers) {
 }
 
 function createPointTemplate({point, pointDestinations, pointOffers}) {
+
   const {basePrice, dateFrom, dateTo, type, isFavorite} = point;
   const selectedOffers = pointOffers.filter((offer) => point.offers.includes(offer.id));
   const offersTemplate = createOffersTemplate(selectedOffers);
