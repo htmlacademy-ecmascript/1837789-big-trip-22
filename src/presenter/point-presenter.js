@@ -3,7 +3,6 @@ import PointView from '../view/point-view.js';
 import {render, replace, remove} from '../framework/render.js';
 import {EditType, Mode} from '../const/point-const.js';
 import {UserAction, UpdateType} from '../const/point-const.js';
-import {isBigDifference} from '../utils/date-utils.js';
 
 export default class PointPresenter {
   #pointsContainer = null;
