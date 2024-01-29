@@ -2,12 +2,11 @@ import TripPresenter from './presenter/trip-presenter.js';
 import PointsModel from './model/points-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import OffersModel from './model/offers-model.js';
-import TripInfoPresenter from './presenter/tripInfo-presenter.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import PointsApiService from './points-api-service.js';
 
-const AUTHORIZATION = 'Basic myxa';
+const AUTHORIZATION = 'Basic myxa1';
 const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const tripEventsElement = document.querySelector('.trip-events');
@@ -36,15 +35,7 @@ const tripPresenter = new TripPresenter({
   filterModel
 });
 
-const tripInfoPresenter = new TripInfoPresenter({
-  pointsModel,
-  filterModel,
-  headerContainer: headerElement,
-});
-
-
 filterPresenter.init();
-tripInfoPresenter.init();
 tripPresenter.init();
 pointsModel.init();
 

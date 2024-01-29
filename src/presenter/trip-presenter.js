@@ -11,6 +11,7 @@ import NewPointPresenter from './new-point-presenter.js';
 import NewPointButtonView from '../view/new-point-button-view.js';
 import LoadingView from '../view/loading-view.js';
 import {RenderPosition} from '../render.js';
+import TripInfoView from '../view/trip-info-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 const TimeLimit = {
@@ -22,6 +23,7 @@ export default class TripPresenter {
   #pointsListComponent = new PointListView();
   #loadingComponent = new LoadingView();
   #sortComponent = null;
+  #tripInfoComponent = null;
   #currentSortType = SortType.DAY;
   #pointsContainer = null;
   #newPointButtonContainer = null;
@@ -85,6 +87,14 @@ export default class TripPresenter {
     render(this.#newPointButtonComponent, this.#newPointButtonContainer);
   }
 
+  #renderTripInfo (points) {
+    this.#tripInfoComponent = new TripInfoView({
+      points: points,
+      destinations: this.#destinationsModel.get()
+    });
+    render(this.#tripInfoComponent, this.#newPointButtonContainer, RenderPosition.AFTERBEGIN);
+  }
+
   #buttonClickHandler = () => {
     this.#isCreating = true;
 
@@ -105,6 +115,7 @@ export default class TripPresenter {
 
   #clearTrip = ({resetSortType = false} = {}) => {
     this.#clearPoints();
+    remove(this.#tripInfoComponent);
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
     this.#sortComponent = null;
@@ -249,6 +260,7 @@ export default class TripPresenter {
       return;
     }
 
+    this.#renderTripInfo(this.points);
     this.#newPointButtonComponent.setDisabled(false);
     this.#renderSort();
     this.#renderPointsContainer();
