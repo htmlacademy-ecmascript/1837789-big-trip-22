@@ -13,7 +13,7 @@ const POINT_BLANCK = {
   destination: null,
   isFavorite: false,
   offers: [],
-  type: 'taxi',
+  type: 'flight',
 };
 
 function createDestinationList(allDestinations) {
@@ -73,15 +73,16 @@ function createDestinationsTemplate (hasDestinations, destinationById) {
   <section class="event__section  event__section--destination">
     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
     <p class="event__destination-description">${destinationById.description}</p>
-    ${createPicturesTemplate(destinationById.pictures)}
+    ${destinationById?.pictures.length > 0 ? createPicturesTemplate(destinationById.pictures) : ''}
   </section>
   ` : ''}
 `);
 }
 
-function createEditPointOffersTemplate(offersByType, point, isDisabled) {
+function createEditPointOffersTemplate(hasOffers, offersByType, point, isDisabled) {
   return (`
-    <section class="event__section  event__section--offers">
+  ${hasOffers ? `
+  <section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
     ${
@@ -101,7 +102,7 @@ function createEditPointOffersTemplate(offersByType, point, isDisabled) {
       }).join('')
     }
     </div>
-    </section>
+    </section>` : ''}
   `);
 }
 
@@ -112,7 +113,7 @@ const createButtonTemplate = (isCreating, isDeleting, isDisabled) => {
     `;
   }
   return `
-    <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting' : 'Delete'}</button>
+    <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
     <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}><span class="visually-hidden">Open event</span></button>
     `;
 };
@@ -123,10 +124,10 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
   const offersByType = allOffers.find((item) => item.type === point.type).offers;
   const destinationById = allDestinations.find((item) => item.id === destination);
   const {isDisabled, isSaving, isDeleting} = state;
-  const offersTemplate = createEditPointOffersTemplate(offersByType, point, isDisabled);
   const allOffersTemplate = createTypeTemplate(allOffers, type);
   const citiesBlock = createDestinationList(allDestinations);
   const hasDestinations = destinationById?.pictures.length > 0 || destinationById?.description;
+  const hasOffers = offersByType.length > 0;
   const isCreating = (modeAddForm === EditType.CREATING);
 
   return (`
@@ -172,8 +173,14 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
     </header>
 
     <section class="event__details">
-          ${offersByType ? offersTemplate : ''}
+
+          ${createEditPointOffersTemplate(hasOffers, offersByType, point, isDisabled)}
+
+
           ${createDestinationsTemplate(hasDestinations, destinationById)}
+
+    </section>
+
   </form>
 </li>
     `);

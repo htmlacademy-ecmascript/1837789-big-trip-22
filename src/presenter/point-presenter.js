@@ -112,13 +112,18 @@ export default class PointPresenter {
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       update);
-    this.#replaceFormToPoint();
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#handleDataChange(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point);
   };
 
   #handleFormClose = () => {
     this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToPoint();
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #handleFavoriteClick = () => {
@@ -127,13 +132,6 @@ export default class PointPresenter {
       UpdateType.PATCH,
       {...this.#point, isFavorite: !this.#point.isFavorite}
     );
-  };
-
-  #handleDeleteClick = (point) => {
-    this.#handleDataChange(
-      UserAction.DELETE_POINT,
-      UpdateType.MINOR,
-      point);
   };
 
   setSaving() {

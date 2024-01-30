@@ -19,6 +19,7 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
   INIT: 'INIT',
+  ERROR: 'ERROR'
 };
 
 export {EditType, Mode, UserAction, UpdateType};

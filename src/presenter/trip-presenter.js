@@ -13,6 +13,7 @@ import LoadingView from '../view/loading-view.js';
 import {RenderPosition} from '../render.js';
 import TripInfoView from '../view/trip-info-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import FailedLoadingView from '../view/failed-loading-view.js';
 
 const TimeLimit = {
   LOWER_LIMIT: 350,
@@ -22,6 +23,7 @@ const TimeLimit = {
 export default class TripPresenter {
   #pointsListComponent = new PointListView();
   #loadingComponent = new LoadingView();
+  #failedLoadingComponent = new FailedLoadingView();
   #sortComponent = null;
   #tripInfoComponent = null;
   #currentSortType = SortType.DAY;
@@ -80,6 +82,7 @@ export default class TripPresenter {
   }
 
   init() {
+    this.#renderPointsContainer();
     this.#renderTrip();
     this.#newPointButtonComponent = new NewPointButtonView({
       onButtonClick: this.#buttonClickHandler,
@@ -87,9 +90,9 @@ export default class TripPresenter {
     render(this.#newPointButtonComponent, this.#newPointButtonContainer);
   }
 
-  #renderTripInfo (points) {
+  #renderTripInfo () {
     this.#tripInfoComponent = new TripInfoView({
-      points: points,
+      points: this.#pointsModel.points,
       destinations: this.#destinationsModel.get(),
       offersModel: this.#offersModel
     });
@@ -182,8 +185,17 @@ export default class TripPresenter {
         remove(this.#loadingComponent);
         this.#renderTrip();
         break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderFailedLoading();
+        break;
     }
   };
+
+  #renderFailedLoading() {
+    render(this.#failedLoadingComponent, this.#pointsListComponent.element);
+  }
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
@@ -261,7 +273,7 @@ export default class TripPresenter {
       return;
     }
 
-    this.#renderTripInfo(this.points);
+    this.#renderTripInfo();
     this.#newPointButtonComponent.setDisabled(false);
     this.#renderSort();
     this.#renderPointsContainer();

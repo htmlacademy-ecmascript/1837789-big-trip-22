@@ -9,7 +9,7 @@ function createFilterTemplate(filters, currentFilterType) {
       const {type, count} = filter;
       return (`<div class="trip-filters__filter">
     <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter"
-    value="${type}" ${count ? '' : 'disabled'}${type === currentFilterType ? 'checked' : ''}>
+    value="${type}" ${type === currentFilterType ? 'checked' : ''} ${count ? '' : 'disabled'}>
     <label class="trip-filters__filter-label" for="filter-${type}">${getUpperFirstChar(type)}</label>
   </div>`);
     }).join('')}

@@ -7,6 +7,7 @@ const DateFormat = {
   shortDate: 'MMM DD',
   time: 'HH:mm',
   scheduleDate: 'DD/MM/YY HH:mm',
+  dayMonth: 'DD MMM'
 };
 
 // Работа с датой
@@ -25,6 +26,10 @@ const MSEC_IN_DAY = HOUR_IN_DAY * MSEC_IN_HOUR;
 
 function formatStringToDayTime(dueDate) {
   return dayjs(dueDate).format(DateFormat.dayTime);
+}
+
+function formatStringToDayMonth(dueDate) {
+  return dayjs(dueDate).format(DateFormat.dayMonth);
 }
 
 function formatStringToShortDate(dueDate) {
@@ -73,6 +78,7 @@ export {
   formatStringToDayTime,
   formatStringToShortDate,
   formatStringToTime,
+  formatStringToDayMonth,
   getPointDuration,
   getScheduleDate,
   getPointsPriceDifference,

@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {formatStringToShortDate, formatStringToDayTime, formatStringToTime, getPointDuration} from '../utils/date-utils.js';
+import {formatStringToShortDate, formatStringToDayMonth, formatStringToDayTime, formatStringToTime, getPointDuration} from '../utils/date-utils.js';
 import {getUpperFirstChar} from '../utils/common.js';
 import he from 'he';
 
@@ -25,7 +25,7 @@ function createPointTemplate({point, pointDestinations, pointOffers}) {
     `<li class="trip-events__item">
         <div class="event">
         <time class="event__date" datetime=${formatStringToDayTime(dateFrom)}>
-           ${formatStringToShortDate(dateFrom)}
+           ${formatStringToDayMonth(dateFrom)}
         </time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
