@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {formatStringToShortDate, formatStringToDayMonth, formatStringToDayTime, formatStringToTime, getPointDuration} from '../utils/date-utils.js';
+import {formatStringToShortDate, formatStringToDayTime, formatStringToTime, getPointDuration} from '../utils/date-utils.js';
 import {getUpperFirstChar} from '../utils/common.js';
 import he from 'he';
 

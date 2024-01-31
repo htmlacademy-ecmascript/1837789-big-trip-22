@@ -5,6 +5,12 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import {EditType} from '../const/point-const.js';
 import he from 'he';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 0,
+  UPPER_LIMIT: 1000,
+};
 
 const POINT_BLANCK = {
   basePrice: 0,
@@ -195,6 +201,10 @@ export default class PointEditView extends AbstractStatefulView {
   #datepickerFrom = null;
   #datepickerTo = null;
   #modeAddForm = null;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick, onDeleteClick, modeAddForm}) {
     super();
