@@ -8,7 +8,7 @@ import he from 'he';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 const TimeLimit = {
-  LOWER_LIMIT: 0,
+  LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
 };
 
@@ -138,7 +138,7 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
   return (`
   <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
-  <fieldset ${isDisabled ? 'disabled' : ''}>
+
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -186,7 +186,7 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
           ${createDestinationsTemplate(hasDestinations, destinationById)}
 
     </section>
-    </fieldset>
+
   </form>
 </li>
     `);
