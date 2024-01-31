@@ -16,7 +16,7 @@ import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import FailedLoadingView from '../view/failed-loading-view.js';
 
 const TimeLimit = {
-  LOWER_LIMIT: 350,
+  LOWER_LIMIT: 0,
   UPPER_LIMIT: 1000,
 };
 
@@ -83,7 +83,11 @@ export default class TripPresenter {
 
   init() {
     this.#renderPointsContainer();
+    this.#renderNewPointButton();
     this.#renderTrip();
+  }
+
+  #renderNewPointButton () {
     this.#newPointButtonComponent = new NewPointButtonView({
       onButtonClick: this.#buttonClickHandler,
     });
@@ -101,7 +105,9 @@ export default class TripPresenter {
 
   #buttonClickHandler = () => {
     this.#isCreating = true;
-
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
     this.createPoint();
     this.#newPointButtonComponent.setDisabled(true);
   };
@@ -148,8 +154,10 @@ export default class TripPresenter {
         break;
       case UserAction.ADD_POINT:
         this.#newPointPresenter.setSaving();
+
         try {
           await this.#pointsModel.addPoint(updateType, update);
+          this.#newPointPresenter.destroy();
         } catch(err) {
           this.#newPointPresenter.setAborting();
         }
@@ -264,11 +272,14 @@ export default class TripPresenter {
   #renderTrip = () => {
     if (this.#isLoading) {
       this.#renderLoading();
+      this.#newPointButtonComponent.setDisabled(true);
       return;
     }
 
     if(this.points.length === 0 && !this.#isLoading) {
-      this.#renderNoPoints();
+      if(!this.#isCreating){
+        this.#renderNoPoints();
+      }
       this.#newPointButtonComponent.setDisabled(false);
       return;
     }

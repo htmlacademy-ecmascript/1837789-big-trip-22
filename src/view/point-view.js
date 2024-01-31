@@ -25,7 +25,7 @@ function createPointTemplate({point, pointDestinations, pointOffers}) {
     `<li class="trip-events__item">
         <div class="event">
         <time class="event__date" datetime=${formatStringToDayTime(dateFrom)}>
-           ${formatStringToDayMonth(dateFrom)}
+           ${formatStringToShortDate(dateFrom)}
         </time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">

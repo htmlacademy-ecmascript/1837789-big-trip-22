@@ -80,7 +80,6 @@ export default class NewPointPresenter {
         isDeleting: false,
       });
     };
-
     this.#pointNewComponent.shake(resetFormState);
   }
 }

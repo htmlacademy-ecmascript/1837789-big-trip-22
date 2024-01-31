@@ -129,10 +129,10 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
   const hasDestinations = destinationById?.pictures.length > 0 || destinationById?.description;
   const hasOffers = offersByType.length > 0;
   const isCreating = (modeAddForm === EditType.CREATING);
-
   return (`
   <li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
+  <fieldset ${isDisabled ? 'disabled' : ''}>
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -180,7 +180,7 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
           ${createDestinationsTemplate(hasDestinations, destinationById)}
 
     </section>
-
+    </fieldset>
   </form>
 </li>
     `);
