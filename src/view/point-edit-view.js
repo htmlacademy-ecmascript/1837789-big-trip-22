@@ -5,12 +5,6 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import {EditType} from '../const/point-const.js';
 import he from 'he';
-import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
-
-const TimeLimit = {
-  LOWER_LIMIT: 350,
-  UPPER_LIMIT: 1000,
-};
 
 const POINT_BLANCK = {
   basePrice: 0,
@@ -160,7 +154,7 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
           ${type}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationById ? he.encode(destinationById.name) : ''}" list="destination-list-1"
-        required ${isDisabled ? 'disabled' : ''}>
+         ${isDisabled ? 'disabled' : ''}>
         ${citiesBlock}
       </div>
 
@@ -171,7 +165,7 @@ function createPointEditTemplate({state, allOffers, allDestinations, modeAddForm
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${he.encode(String(basePrice))}" min="1" max="100000" required ${isDisabled ? 'disabled' : ''}>
+        <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${he.encode(String(basePrice))}" min="0" max="100000"  ${isDisabled ? 'disabled' : ''}>
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
@@ -201,10 +195,6 @@ export default class PointEditView extends AbstractStatefulView {
   #datepickerFrom = null;
   #datepickerTo = null;
   #modeAddForm = null;
-  #uiBlocker = new UiBlocker({
-    lowerLimit: TimeLimit.LOWER_LIMIT,
-    upperLimit: TimeLimit.UPPER_LIMIT
-  });
 
   constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick, onDeleteClick, modeAddForm}) {
     super();
