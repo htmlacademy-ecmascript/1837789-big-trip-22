@@ -1,8 +1,7 @@
 import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
 import {render, replace, remove} from '../framework/render.js';
-import {EditType, Mode} from '../const/point-const.js';
-import {UserAction, UpdateType} from '../const/point-const.js';
+import {UserAction, UpdateType, EditType, Mode} from '../const/point-const.js';
 
 export default class PointPresenter {
   #pointsContainer = null;
@@ -54,9 +53,6 @@ export default class PointPresenter {
       render(this.#pointComponent, this.#pointsContainer);
       return;
     }
-
-    // Проверка на наличие в DOM необходима,
-    // чтобы не пытаться заменить то, что не было отрисовано
 
     if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);

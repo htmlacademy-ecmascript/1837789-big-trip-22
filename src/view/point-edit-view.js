@@ -6,7 +6,7 @@ import 'flatpickr/dist/flatpickr.min.css';
 import {EditType} from '../const/point-const.js';
 import he from 'he';
 
-const POINT_BLANCK = {
+const PointBlank = {
   basePrice: 0,
   dateFrom: null,
   dateTo: null,
@@ -196,7 +196,7 @@ export default class PointEditView extends AbstractStatefulView {
   #datepickerTo = null;
   #modeAddForm = null;
 
-  constructor({point = POINT_BLANCK, allOffers, allDestinations, onPointEditSubmit, onResetClick, onDeleteClick, modeAddForm}) {
+  constructor({point = PointBlank, allOffers, allDestinations, onPointEditSubmit, onResetClick, onDeleteClick, modeAddForm}) {
     super();
     this._setState(PointEditView.parsePointToState(point));
     this.#allOffers = allOffers;

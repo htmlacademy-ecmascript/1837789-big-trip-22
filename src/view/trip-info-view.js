@@ -4,8 +4,8 @@ import {formatStringToDayMonth} from '../utils/date-utils.js';
 const MAX_LENGTH = 3;
 
 function createTripInfoTemplate({points, destinations, offersModel}) {
-  const DAY_START = formatStringToDayMonth(points[0].dateFrom);
-  const DAY_END = formatStringToDayMonth(points[points.length - 1].dateTo);
+  const dayStart = formatStringToDayMonth(points[0].dateFrom);
+  const dayEnd = formatStringToDayMonth(points[points.length - 1].dateTo);
   let price = 0;
   const cityNames = [];
   let destinationById = destinations.find((item) => item.id === points[0].destination);
@@ -33,7 +33,7 @@ function createTripInfoTemplate({points, destinations, offersModel}) {
     <div class="trip-info__main">
       <h1 class="trip-info__title">${cityNames[0] ? cityNames[0] : ''} ${cityNames[1] ? `&mdash; ${cityNames[1]}` : ''}  ${cityNames[2] ? `&mdash; ${cityNames[2]}` : ''}</h1>
 
-     <p class="trip-info__dates">${DAY_START}&nbsp;&mdash;&nbsp;${DAY_END}</p>
+     <p class="trip-info__dates">${dayStart}&nbsp;&mdash;&nbsp;${dayEnd}</p>
     </div>
 
     <p class="trip-info__cost">

@@ -6,7 +6,7 @@ import NoPointView from '../view/no-point-view.js';
 import PointPresenter from './point-presenter.js';
 import {sortPointByTime, sortPointByPrice, sortPointByDay} from '../utils/sort-utils.js';
 import {UserAction, UpdateType} from '../const/point-const.js';
-import {filter, FilterType} from '../const/filter-const.js';
+import {Filter, FilterType} from '../const/filter-const.js';
 import NewPointPresenter from './new-point-presenter.js';
 import NewPointButtonView from '../view/new-point-button-view.js';
 import LoadingView from '../view/loading-view.js';
@@ -68,7 +68,7 @@ export default class TripPresenter {
   get points() {
     this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
-    const filteredPoint = filter[this.#filterType](points);
+    const filteredPoint = Filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.TIME:
@@ -174,7 +174,6 @@ export default class TripPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    // В зависимости от типа изменений решаем, что делать:
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);

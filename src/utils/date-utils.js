@@ -10,8 +10,6 @@ const DateFormat = {
   dayMonth: 'DD MMM'
 };
 
-// Работа с датой
-
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
