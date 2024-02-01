@@ -154,7 +154,6 @@ export default class TripPresenter {
         break;
       case UserAction.ADD_POINT:
         this.#newPointPresenter.setSaving();
-
         try {
           await this.#pointsModel.addPoint(updateType, update);
           this.#newPointPresenter.destroy();

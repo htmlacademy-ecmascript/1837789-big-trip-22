@@ -109,12 +109,12 @@ function createEditPointOffersTemplate(hasOffers, offersByType, point, isDisable
 const createButtonTemplate = (isCreating, isDeleting, isDisabled) => {
   if (isCreating) {
     return `
-      <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>
+      <button class="event__reset-btn" type="reset">Cancel</button>
     `;
   }
   return `
     <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
-    <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}><span class="visually-hidden">Open event</span></button>
+    <button class="event__rollup-btn" type="button" ><span class="visually-hidden">Open event</span></button>
     `;
 };
 
