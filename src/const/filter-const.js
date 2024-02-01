@@ -7,11 +7,11 @@ const FilterType = {
   PAST: 'past'
 };
 
-const filter = {
+const Filter = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) => points.filter((point) => dayjs().isBefore(dayjs(point.dateFrom))),
   [FilterType.PRESENT]: (points) => points.filter((point) => dayjs().isBefore(dayjs(point.dateTo)) && dayjs().isAfter(dayjs(point.dateFrom))),
   [FilterType.PAST]: (points) => points.filter((point) => dayjs().isAfter(dayjs(point.dateTo)))
 };
 
-export {FilterType, filter};
+export {FilterType, Filter};

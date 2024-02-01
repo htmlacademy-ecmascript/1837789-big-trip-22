@@ -6,22 +6,24 @@ import NoPointView from '../view/no-point-view.js';
 import PointPresenter from './point-presenter.js';
 import {sortPointByTime, sortPointByPrice, sortPointByDay} from '../utils/sort-utils.js';
 import {UserAction, UpdateType} from '../const/point-const.js';
-import {filter, FilterType} from '../const/filter-const.js';
+import {Filter, FilterType} from '../const/filter-const.js';
 import NewPointPresenter from './new-point-presenter.js';
 import NewPointButtonView from '../view/new-point-button-view.js';
 import LoadingView from '../view/loading-view.js';
 import {RenderPosition} from '../render.js';
 import TripInfoView from '../view/trip-info-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+import FailedLoadingView from '../view/failed-loading-view.js';
 
 const TimeLimit = {
-  LOWER_LIMIT: 350,
+  LOWER_LIMIT: 0,
   UPPER_LIMIT: 1000,
 };
 
 export default class TripPresenter {
   #pointsListComponent = new PointListView();
   #loadingComponent = new LoadingView();
+  #failedLoadingComponent = new FailedLoadingView();
   #sortComponent = null;
   #tripInfoComponent = null;
   #currentSortType = SortType.DAY;
@@ -66,7 +68,7 @@ export default class TripPresenter {
   get points() {
     this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
-    const filteredPoint = filter[this.#filterType](points);
+    const filteredPoint = Filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.TIME:
@@ -80,24 +82,32 @@ export default class TripPresenter {
   }
 
   init() {
+    this.#renderPointsContainer();
+    this.#renderNewPointButton();
     this.#renderTrip();
+  }
+
+  #renderNewPointButton () {
     this.#newPointButtonComponent = new NewPointButtonView({
       onButtonClick: this.#buttonClickHandler,
     });
     render(this.#newPointButtonComponent, this.#newPointButtonContainer);
   }
 
-  #renderTripInfo (points) {
+  #renderTripInfo () {
     this.#tripInfoComponent = new TripInfoView({
-      points: points,
-      destinations: this.#destinationsModel.get()
+      points: this.#pointsModel.points,
+      destinations: this.#destinationsModel.get(),
+      offersModel: this.#offersModel
     });
     render(this.#tripInfoComponent, this.#newPointButtonContainer, RenderPosition.AFTERBEGIN);
   }
 
   #buttonClickHandler = () => {
     this.#isCreating = true;
-
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
     this.createPoint();
     this.#newPointButtonComponent.setDisabled(true);
   };
@@ -146,6 +156,7 @@ export default class TripPresenter {
         this.#newPointPresenter.setSaving();
         try {
           await this.#pointsModel.addPoint(updateType, update);
+          this.#newPointPresenter.destroy();
         } catch(err) {
           this.#newPointPresenter.setAborting();
         }
@@ -163,7 +174,6 @@ export default class TripPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    // В зависимости от типа изменений решаем, что делать:
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenters.get(data.id).init(data);
@@ -181,8 +191,17 @@ export default class TripPresenter {
         remove(this.#loadingComponent);
         this.#renderTrip();
         break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderFailedLoading();
+        break;
     }
   };
+
+  #renderFailedLoading() {
+    render(this.#failedLoadingComponent, this.#pointsListComponent.element);
+  }
 
   #renderPoint(point) {
     const pointPresenter = new PointPresenter({
@@ -251,16 +270,19 @@ export default class TripPresenter {
   #renderTrip = () => {
     if (this.#isLoading) {
       this.#renderLoading();
+      this.#newPointButtonComponent.setDisabled(true);
       return;
     }
 
     if(this.points.length === 0 && !this.#isLoading) {
-      this.#renderNoPoints();
+      if(!this.#isCreating){
+        this.#renderNoPoints();
+      }
       this.#newPointButtonComponent.setDisabled(false);
       return;
     }
 
-    this.#renderTripInfo(this.points);
+    this.#renderTripInfo();
     this.#newPointButtonComponent.setDisabled(false);
     this.#renderSort();
     this.#renderPointsContainer();

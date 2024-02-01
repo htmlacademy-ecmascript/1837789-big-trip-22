@@ -52,7 +52,6 @@ export default class NewPointPresenter {
       UpdateType.MINOR,
       point
     );
-    this.destroy();
   };
 
   #handleResetClick = () => {
@@ -81,7 +80,6 @@ export default class NewPointPresenter {
         isDeleting: false,
       });
     };
-
     this.#pointNewComponent.shake(resetFormState);
   }
 }
