@@ -236,7 +236,7 @@ export default class PointEditView extends AbstractStatefulView {
   _restoreHandlers() {
     if(this.#modeAddForm === EditType.EDITING) {
       this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#resetButtonClickHandler);
-      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteHandler);
+      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
     }
     this.element.querySelector('form').addEventListener('submit', this.#pointEditSubmitHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
@@ -245,7 +245,7 @@ export default class PointEditView extends AbstractStatefulView {
     this.element.querySelector('.event__input--price').addEventListener('change', this.#priceChangeHandler);
     this.#setDatepickers();
     if(this.#modeAddForm === EditType.CREATING) {
-      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteHandler);
+      this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formDeleteClickHandler);
     }
   }
 
@@ -339,7 +339,7 @@ export default class PointEditView extends AbstractStatefulView {
     );
   };
 
-  #formDeleteHandler = (evt) => {
+  #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
     this.#onDeleteClick(PointEditView.parseStateToPoint(this._state));
   };
