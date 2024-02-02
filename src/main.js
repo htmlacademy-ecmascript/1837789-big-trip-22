@@ -6,7 +6,7 @@ import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import PointsApiService from './points-api-service.js';
 
-const AUTHORIZATION = 'Basic myxa12';
+const AUTHORIZATION = 'Basic myxa1';
 const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const tripEventsElement = document.querySelector('.trip-events');

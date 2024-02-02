@@ -1,6 +1,6 @@
-const getUpperFirstChar = (str) => {
-  if (str) {
-    return str[0].toUpperCase() + str.slice(1);
+const getUpperFirstChar = (string) => {
+  if (string) {
+    return string[0].toUpperCase() + string.slice(1);
   }
 };
 

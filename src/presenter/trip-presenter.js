@@ -40,6 +40,7 @@ export default class TripPresenter {
   #filterType = FilterType.EVERYTHING;
   #newPointButtonComponent = null;
   #isLoading = true;
+  #isFailed = false;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
@@ -194,7 +195,9 @@ export default class TripPresenter {
       case UpdateType.ERROR:
         this.#isLoading = false;
         remove(this.#loadingComponent);
+        this.#newPointButtonComponent.setDisabled(true);
         this.#renderFailedLoading();
+        this.#isFailed = true;
         break;
     }
   };
@@ -275,10 +278,10 @@ export default class TripPresenter {
     }
 
     if(this.points.length === 0 && !this.#isLoading) {
-      if(!this.#isCreating){
+      if(!this.#isCreating && !this.#isFailed) {
         this.#renderNoPoints();
+        this.#newPointButtonComponent.setDisabled(false);
       }
-      this.#newPointButtonComponent.setDisabled(false);
       return;
     }
 
